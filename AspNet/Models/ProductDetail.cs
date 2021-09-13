@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProductServer.Models
 {
@@ -7,10 +8,11 @@ namespace ProductServer.Models
     {
         [Key]
         public Guid ProductID { get; set; }
-        public Product Product { get; set; }
 
         [Required]
         public string Detail { get; set; }
 
+        [ForeignKey("ProductID")]
+        public Product Product { get; set; }
     }
 }
