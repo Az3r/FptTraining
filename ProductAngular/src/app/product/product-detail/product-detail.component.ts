@@ -15,7 +15,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   edit() {
-    this.dialog.open(ProductDialogComponent)
+    this.dialog.open(ProductDialogComponent, { width: "640px", height: "480px" })
   }
 
 }
