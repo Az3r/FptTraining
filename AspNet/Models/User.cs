@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProductServer.Models
 {
-    public class User
+    public class User : IUser
     {
         [Key]
         public Guid ID { get; set; }
@@ -14,6 +14,15 @@ namespace ProductServer.Models
 
         [Required]
         [StringLength(60)]
+        public string HashedPassword { get; set; }
+    }
+
+    interface IUser
+    {
+        public Guid ID { get; set; }
+
+        public string DisplayName { get; set; }
+
         public string HashedPassword { get; set; }
     }
 }

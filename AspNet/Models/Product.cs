@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProductServer.Models
 {
-    public class Product
+    public class Product : IProduct
     {
         [Key]
         public Guid ID { get; set; }
@@ -35,5 +35,28 @@ namespace ProductServer.Models
         public Supplier Supplier { get; set; }
 
         public List<Category> Categories { get; set; }
+    }
+
+    interface IProduct
+    {
+        Guid ID { get; set; }
+
+        string Name { get; set; }
+
+        string Description { get; set; }
+
+        DateTime ReleaseDate { get; set; }
+
+        DateTime? DiscontinuedDate { get; set; }
+
+        Int16 Rating { get; set; }
+
+        double Price { get; set; }
+
+        ProductDetail ProductDetail { get; set; }
+
+        Supplier Supplier { get; set; }
+
+        List<Category> Categories { get; set; }
     }
 }
