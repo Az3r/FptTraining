@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -30,12 +28,12 @@ namespace ProductServer.Models
         public double Price { get; set; }
 
         // Relations
-        public Guid ProductDetailID {get;set;}
+        public Guid ProductDetailID { get; set; }
         public ProductDetail ProductDetail { get; set; }
 
-        public Guid SupplierID {get;set;}
-        public Supplier Supplier {get;set;}
+        public Guid SupplierID { get; set; }
+        public Supplier Supplier { get; set; }
 
-        public List<Category> Categories {get;set;}
+        public List<Category> Categories { get; set; }
     }
 }

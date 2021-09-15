@@ -1,0 +1,72 @@
+[
+    {
+        "id": "613f0407ccb3548d7c157209",
+        "name": "adipisicing irure quis commodo",
+        "price": 99.44,
+        "rating": 4.56,
+        "category": "duis magna dolore do ut non excepteur sint incididunt Lorem"
+    },
+    {
+        "id": "613f04078778e91c977f3eb6",
+        "name": "sunt in consequat consectetur ea esse occaecat",
+        "price": 87.28,
+        "rating": 2.77,
+        "category": "aliquip cupidatat sit Lorem nostrud aliqua culpa"
+    },
+    {
+        "id": "613f04072fca1904fd2c289c",
+        "name": "enim minim nulla excepteur",
+        "price": 6.15,
+        "rating": 3.76,
+        "category": "et labore Lorem amet id sint ad exercitation laboris laboris"
+    },
+    {
+        "id": "613f0407282ac3f1c9bbc2ed",
+        "name": "adipisicing anim officia commodo ad deserunt voluptate exercitation commodo",
+        "price": 50.03,
+        "rating": 3.52,
+        "category": "fugiat et eu sint sunt cillum cillum excepteur eiusmod"
+    },
+    {
+        "id": "613f0407a05adc99a86a71fb",
+        "name": "voluptate nisi sint",
+        "price": 33.84,
+        "rating": 2.72,
+        "category": "esse proident irure"
+    },
+    {
+        "id": "613f0407156e807b3abfbf12",
+        "name": "laborum tempor esse",
+        "price": 33.16,
+        "rating": 1.79,
+        "category": "cupidatat duis"
+    },
+    {
+        "id": "613f0407a4322e19188e9d30",
+        "name": "eiusmod sit exercitation esse dolor excepteur proident ipsum minim",
+        "price": 11.83,
+        "rating": 4.76,
+        "category": "est sit quis voluptate reprehenderit duis pariatur"
+    },
+    {
+        "id": "613f0407a0a8df8ccafd1303",
+        "name": "cupidatat do ullamco mollit sit",
+        "price": 32.95,
+        "rating": 4.12,
+        "category": "ex consectetur aute dolore exercitation qui ea deserunt duis nostrud"
+    },
+    {
+        "id": "613f04071aebf7574a1a18a0",
+        "name": "velit ut voluptate et aute laborum adipisicing",
+        "price": 68.77,
+        "rating": 2.82,
+        "category": "cupidatat sint"
+    },
+    {
+        "id": "613f040757808582db1f363a",
+        "name": "duis magna",
+        "price": 24.52,
+        "rating": 4.26,
+        "category": "ipsum veniam ad est"
+    }
+]
