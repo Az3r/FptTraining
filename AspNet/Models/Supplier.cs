@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProductServer.Models
 {
-    public class Supplier:ISupplier
+    public class Supplier : ISupplier
     {
         [Key]
         public Guid ID { get; set; }

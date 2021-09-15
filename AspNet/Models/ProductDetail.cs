@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProductServer.Models
 {
-    public class ProductDetail: IProductDetail
+    public class ProductDetail : IProductDetail
     {
         [Key]
         public Guid ProductID { get; set; }
