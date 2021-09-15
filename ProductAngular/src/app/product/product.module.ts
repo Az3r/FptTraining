@@ -3,6 +3,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ProductComponent } from './product/product.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductDialogComponent } from './product-dialog/product-dialog.component';
+import { CreateProductDialog } from './create-product-dialog/create-product-dialog.component';
 
 
 @NgModule({
@@ -10,6 +11,7 @@ import { ProductDialogComponent } from './product-dialog/product-dialog.componen
     ProductComponent,
     ProductDetailComponent,
     ProductDialogComponent,
+    CreateProductDialog,
   ],
   imports: [
     SharedModule

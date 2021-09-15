@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateProductDialog } from '../create-product-dialog/create-product-dialog.component';
 
 @Component({
   selector: 'app-product',
@@ -94,9 +96,15 @@ export class ProductComponent implements OnInit {
 
 
 
-  constructor() { }
+  constructor(
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  create() {
+    this.dialog.open(CreateProductDialog, {width: "640px"})
   }
 
 }

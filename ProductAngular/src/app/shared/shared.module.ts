@@ -1,3 +1,4 @@
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,11 +15,10 @@ import { MatSelectModule } from '@angular/material/select'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core';
-import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
-  
     ConfirmDialogComponent
   ],
   imports: [
@@ -36,7 +36,8 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     MatSelectModule,
     MatCheckboxModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatPaginatorModule
   ],
   exports: [
     CommonModule,
@@ -53,7 +54,8 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     MatSelectModule,
     MatCheckboxModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatPaginatorModule
   ]
 })
 export class SharedModule { }

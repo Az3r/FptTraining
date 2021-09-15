@@ -21,10 +21,12 @@ export class ProductDialogComponent implements OnInit {
   }
 
   delete() {
-    this.dialog.open(ConfirmDialogComponent, {data: {
-      title: "Delete Product",
-      message: "You are about to remove this product, this action is irreversible. Do you want to proceed?"
-    }})
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: "Delete Product",
+        message: "You are about to remove this product, this action is irreversible. Do you want to proceed?"
+      }
+    })
   }
 
 }
