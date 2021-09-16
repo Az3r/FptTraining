@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using ProductServer.ApiModels;
 using ProductServer.Models;
 
 namespace ProductServer.Controllers
@@ -26,9 +28,34 @@ namespace ProductServer.Controllers
             }
         }
 
+        [HttpGet("find")]
+        public List<MockProduct> FindProducts(string name,
+                                              string category,
+                                              double minPrice,
+                                              double maxPrice,
+                                              int size = 20,
+                                              int offset = 0)
+        {
+            return new List<MockProduct>();
+        }
 
+        [HttpPost("create")]
+        public IActionResult CreateProduct(CreateProductRequest body)
+        {
+            return Created(Guid.NewGuid().ToString(), body);
+        }
 
+        [HttpPut("update")]
+        public IActionResult UpdateProduct(UpdateProductRequest body)
+        {
+            return Ok(body);
+        }
 
+        [HttpDelete("delete/{id}")]
+        public IActionResult DeleteProduct(Guid id)
+        {
+            return Ok();
+        }
 
         private readonly ProductContext ProductContext;
     }

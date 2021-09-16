@@ -104,7 +104,7 @@ export class ProductComponent implements OnInit {
   }
 
   create() {
-    this.dialog.open(CreateProductDialog, {width: "640px"})
+    this.dialog.open(CreateProductDialog, { width: "640px" })
   }
 
 }
