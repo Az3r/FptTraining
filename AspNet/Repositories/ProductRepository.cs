@@ -1,48 +1,48 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using ProductServer.Models;
 
 namespace ProductServer.Repositories
 {
-  public class ProductRepository : IDisposable
+  public class ProductRepository<TEntity> where TEntity : class
   {
     public ProductRepository(ProductContext context)
     {
       this.context = context;
+      Entities = context.Set<TEntity>();
     }
 
-    public List<Product> FindProduct(ProductQuery query, int size = 20, int offset = 0)
+    public void Create(TEntity entity)
     {
-      if (query.IsEmpty())
-      {
-        return context.Products.Skip(offset * size).Take(size).ToList();
-      }
-      List<Product> products = context.Products.Where(p => p.Name.Equals(query.Name, StringComparison.InvariantCultureIgnoreCase)).ToList();
+      Entities.Add(entity);
+    }
+
+    public void Update(TEntity entity)
+    {
+      Entities.Update(entity);
+    }
+
+    public void Delete(object id)
+    {
+      TEntity found = Entities.Find(id);
+      if (found is not null) Entities.Remove(found);
+    }
+
+    public List<TEntity> Find(Func<TEntity, bool> filter, int size, int offset)
+    {
+      var products = Entities.Where(filter).Skip(offset * size).Take(size).ToList();
       return products;
     }
 
-    public void Dispose()
+    public void Save()
     {
-      context.Dispose();
+      context.SaveChanges();
     }
 
     private ProductContext context;
+    private DbSet<TEntity> Entities;
   }
 
-  public class ProductQuery
-  {
-    public string Name { get; set; } = "";
-    public string Category { get; set; } = "";
-    public double MinPrice { get; set; } = double.MinValue;
-    public double MaxPrice { get; set; } = double.MaxValue;
-
-    public bool IsEmpty()
-    {
-      return (MaxPrice == double.MaxValue &&
-              MinPrice == double.MinValue &&
-              String.IsNullOrWhiteSpace(Name) &&
-              String.IsNullOrWhiteSpace(Category));
-    }
-  }
 }

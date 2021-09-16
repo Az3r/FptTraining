@@ -1,29 +1,25 @@
 using System;
+using Microsoft.EntityFrameworkCore;
 using ProductServer.Models;
 
 namespace ProductServer.Repositories
 {
-  public class UnitOfWork : IDisposable
+  public class UnitOfWork
   {
-    public UnitOfWork(ProductContext product)
+    public UnitOfWork(ProductContext context)
     {
-      productContext = product;
-      ProductRepository = new ProductRepository(product);
-    }
-
-    public void Dispose()
-    {
-      productContext.Dispose();
+      this.context = context;
+      ProductRepository = new ProductRepository<Product>(context);
     }
 
     public void Save()
     {
-      productContext.SaveChanges();
+      context.SaveChanges();
     }
 
-    public readonly ProductRepository ProductRepository;
+    public readonly ProductRepository<Product> ProductRepository;
 
-    private readonly ProductContext productContext;
+    private readonly ProductContext context;
   }
 
 }

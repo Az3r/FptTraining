@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using ProductServer.Models;
+using ProductServer.Repositories;
 
 namespace ProductServer
 {
@@ -28,7 +29,7 @@ namespace ProductServer
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProductServer", Version = "v1" });
       });
       services.AddDbContext<ProductContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ProductDB")));
-      services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ProductDB")));
+      services.AddSingleton<UnitOfWork>(provider => new UnitOfWork(provider.GetService<ProductContext>()));
 
     }
 
