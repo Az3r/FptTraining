@@ -7,6 +7,15 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using ProductServer.Models;
 using ProductServer.Repositories;
+using ProductServer.Services;
+using Microsoft.AspNetCore.Authentication;
+using System.Linq;
+using System.Security.Claims;
+using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ProductServer
 {
@@ -27,9 +36,49 @@ namespace ProductServer
       services.AddSwaggerGen(c =>
       {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProductServer", Version = "v1" });
+
+        var securitySchema = new OpenApiSecurityScheme
+        {
+          Description = "Using the Authorization header with the Bearer scheme.",
+          Name = "Authorization",
+          In = ParameterLocation.Header,
+          Type = SecuritySchemeType.Http,
+          Scheme = "bearer",
+          Reference = new OpenApiReference
+          {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Bearer"
+          }
+        };
+
+        c.AddSecurityDefinition("Bearer", securitySchema);
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+          {
+              { securitySchema, new[] { "Bearer" } }
+          });
       });
+
       services.AddDbContext<ProductContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ProductDB")));
       services.AddSingleton<UnitOfWork>(provider => new UnitOfWork(provider.GetService<ProductContext>()));
+      services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+          options.SaveToken = true;
+          options.RequireHttpsMetadata = false;
+          options.TokenValidationParameters = new TokenValidationParameters()
+          {
+            ValidateLifetime = true,
+            ValidAudience = Configuration["JwtConfig:Audience"],
+            ValidIssuer = Configuration["JwtConfig:Issuer"],
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtConfig:Secret"]))
+          };
+        });
+
+
+      // user defined services
+      services.AddSingleton<AuthService>();
 
     }
 
@@ -45,6 +94,7 @@ namespace ProductServer
 
       app.UseRouting();
 
+      app.UseAuthentication();
       app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>
