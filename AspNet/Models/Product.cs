@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProductServer.Models
 {
@@ -13,7 +14,7 @@ namespace ProductServer.Models
     DateTime? DiscontinuedDate { get; set; }
     short Rating { get; set; }
     double Price { get; set; }
-    Guid ProductDetailID { get; set; }
+
     ProductDetail ProductDetail { get; set; }
     Guid SupplierID { get; set; }
     Supplier Supplier { get; set; }
@@ -43,11 +44,11 @@ namespace ProductServer.Models
     [Required]
     public double Price { get; set; }
 
+    public Guid SupplierID { get; set; }
+
     // Relations
-    public Guid ProductDetailID { get; set; }
     public ProductDetail ProductDetail { get; set; }
 
-    public Guid SupplierID { get; set; }
     public Supplier Supplier { get; set; }
 
     public List<Category> Categories { get; set; }
