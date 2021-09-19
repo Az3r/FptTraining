@@ -12,7 +12,15 @@ using ProductServer.Repositories;
 
 namespace ProductServer.Services
 {
-  public class AuthService
+  public interface IAuthService
+  {
+    void ActivateRefreshToken(Auth token);
+    AuthTokenDto CreateJwtToken(User user);
+    void StoreRefreshToken(Auth token);
+    VerifyTokenResult VerifyRefreshToken(string value, out Auth token);
+  }
+
+  public class AuthService : IAuthService
   {
     public AuthService(IConfiguration configuration, IUnitOfWork worker)
     {

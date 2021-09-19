@@ -4,22 +4,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProductServer.Models
 {
-    public class ProductDetail : IProductDetail
-    {
-        [Key]
-        public Guid ProductID { get; set; }
+  public interface IProductDetail
+  {
+    Guid ProductID { get; set; }
+    string Detail { get; set; }
+    Product Product { get; set; }
+  }
 
-        [Required]
-        public string Detail { get; set; }
+  public class ProductDetail : IProductDetail
+  {
+    [Key]
+    public Guid ProductID { get; set; }
 
-        [ForeignKey("ProductID")]
-        public Product Product { get; set; }
-    }
+    [Required]
+    public string Detail { get; set; }
 
-    interface IProductDetail
-    {
-        string Detail { get; set; }
+    [ForeignKey("ProductID")]
+    public Product Product { get; set; }
+  }
 
-        Product Product { get; set; }
-    }
 }

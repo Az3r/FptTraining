@@ -4,6 +4,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProductServer.Models
 {
+  public interface IUser
+  {
+    Guid ID { get; set; }
+    string DisplayName { get; set; }
+    string HashedPassword { get; set; }
+    List<Auth> Auths { get; set; }
+  }
+
   public class User : IUser
   {
     [Key]
@@ -18,14 +26,5 @@ namespace ProductServer.Models
     public string HashedPassword { get; set; }
 
     public List<Auth> Auths { get; set; }
-  }
-
-  interface IUser
-  {
-    public Guid ID { get; set; }
-
-    public string DisplayName { get; set; }
-
-    public string HashedPassword { get; set; }
   }
 }

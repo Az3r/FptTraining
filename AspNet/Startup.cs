@@ -8,11 +8,6 @@ using Microsoft.OpenApi.Models;
 using ProductServer.Models;
 using ProductServer.Repositories;
 using ProductServer.Services;
-using Microsoft.AspNetCore.Authentication;
-using System.Linq;
-using System.Security.Claims;
-using System;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -81,7 +76,7 @@ namespace ProductServer
 
 
       // user defined services
-      services.AddSingleton<AuthService>();
+      services.AddSingleton<IAuthService, AuthService>();
 
     }
 

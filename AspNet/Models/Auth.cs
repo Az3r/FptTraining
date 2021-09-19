@@ -4,7 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProductServer.Models
 {
-  public class Auth
+  public interface IAuth
+  {
+    Guid UserID { get; set; }
+    User User { get; set; }
+    string RefreshToken { get; set; }
+    DateTime? ActivatedAt { get; set; }
+  }
+
+  public class Auth : IAuth
   {
     public Guid UserID { get; set; }
 
@@ -17,4 +25,5 @@ namespace ProductServer.Models
 
     public DateTime? ActivatedAt { get; set; }
   }
+
 }

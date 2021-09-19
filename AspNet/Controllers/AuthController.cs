@@ -4,7 +4,6 @@ using ProductServer.ApiModels;
 using Microsoft.AspNetCore.Authorization;
 using ProductServer.Helpers;
 using ProductServer.Services;
-using System.Security.Claims;
 using ProductServer.Repositories;
 using ProductServer.Models;
 
@@ -15,7 +14,7 @@ namespace ProductServer
   [Authorize]
   public class AuthController : ControllerBase
   {
-    public AuthController(AuthService auth, IUnitOfWork worker)
+    public AuthController(IAuthService auth, IUnitOfWork worker)
     {
       this.auth = auth;
       this.worker = worker;
@@ -53,10 +52,8 @@ namespace ProductServer
       return Ok(ApiHelper.Success(dto));
     }
 
-    private AuthService auth;
+    private IAuthService auth;
 
     private readonly IUnitOfWork worker;
   }
-
-
 }
