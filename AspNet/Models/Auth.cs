@@ -14,5 +14,7 @@ namespace ProductServer.Models
     [Required]
     [StringLength(128)]
     public string RefreshToken { get; set; }
+
+    public DateTime? ActivatedAt { get; set; }
   }
 }

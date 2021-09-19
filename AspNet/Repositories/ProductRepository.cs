@@ -42,7 +42,7 @@ namespace ProductServer.Repositories
     }
 
     private ProductContext context;
-    private DbSet<TEntity> Entities;
+    public readonly DbSet<TEntity> Entities;
   }
 
 }

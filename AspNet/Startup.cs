@@ -58,8 +58,11 @@ namespace ProductServer
           });
       });
 
-      services.AddDbContext<ProductContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ProductDB")));
-      services.AddSingleton<UnitOfWork>(provider => new UnitOfWork(provider.GetService<ProductContext>()));
+      services.AddDbContext<ProductContext>(
+        options => options.UseSqlServer(Configuration.GetConnectionString("ProductDB")),
+        ServiceLifetime.Singleton
+      );
+      services.AddSingleton<IUnitOfWork, UnitOfWork>();
       services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
@@ -67,11 +70,11 @@ namespace ProductServer
           options.RequireHttpsMetadata = false;
           options.TokenValidationParameters = new TokenValidationParameters()
           {
+            ValidAlgorithms = new string[] { "HS512" },
+            ValidateActor = true,
             ValidateLifetime = true,
             ValidAudience = Configuration["JwtConfig:Audience"],
             ValidIssuer = Configuration["JwtConfig:Issuer"],
-            ValidateIssuer = true,
-            ValidateAudience = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtConfig:Secret"]))
           };
         });
