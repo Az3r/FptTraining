@@ -16,7 +16,7 @@ namespace ProductServer.Models
 
       builder.Entity<Auth>().HasKey(p => new { p.UserID, p.RefreshToken });
 
-      Seed(builder);
+      // Seed(builder);
 
     }
 
