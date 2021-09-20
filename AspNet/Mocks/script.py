@@ -2,6 +2,7 @@ import requests
 from pathlib import Path
 from bs4 import BeautifulSoup
 import json
+import uuid
 
 
 def get_books():
@@ -82,3 +83,6 @@ data = {
     "phones": phones
 }
 Path("Mocks/products.json").write_text(json.dumps(data, indent=2))
+
+uuids = [str(uuid.uuid4()) for i in range(200)]
+Path("Mocks/uuids.json").write_text(json.dumps(uuids, indent=2))
