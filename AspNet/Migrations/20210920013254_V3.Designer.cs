@@ -10,7 +10,7 @@ using ProductServer.Models;
 namespace ProductServer.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20210919102434_V3")]
+    [Migration("20210920013254_V3")]
     partial class V3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,7 +72,6 @@ namespace ProductServer.Migrations
             modelBuilder.Entity("ProductServer.Models.Product", b =>
                 {
                     b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -109,6 +108,7 @@ namespace ProductServer.Migrations
             modelBuilder.Entity("ProductServer.Models.ProductDetail", b =>
                 {
                     b.Property<Guid>("ProductID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Detail")
@@ -190,29 +190,21 @@ namespace ProductServer.Migrations
 
             modelBuilder.Entity("ProductServer.Models.Product", b =>
                 {
+                    b.HasOne("ProductServer.Models.ProductDetail", "ProductDetail")
+                        .WithMany()
+                        .HasForeignKey("ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProductServer.Models.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Supplier");
-                });
-
-            modelBuilder.Entity("ProductServer.Models.ProductDetail", b =>
-                {
-                    b.HasOne("ProductServer.Models.Product", "Product")
-                        .WithOne("ProductDetail")
-                        .HasForeignKey("ProductServer.Models.ProductDetail", "ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("ProductServer.Models.Product", b =>
-                {
                     b.Navigation("ProductDetail");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("ProductServer.Models.User", b =>

@@ -47,6 +47,7 @@ namespace ProductServer.Models
     public Guid SupplierID { get; set; }
 
     // Relations
+    [ForeignKey("ID")]
     public ProductDetail ProductDetail { get; set; }
 
     public Supplier Supplier { get; set; }
