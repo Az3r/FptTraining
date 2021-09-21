@@ -9,7 +9,7 @@ namespace ProductServer.Models
     Guid ID { get; set; }
     string DisplayName { get; set; }
     string HashedPassword { get; set; }
-    List<Auth> Auths { get; set; }
+    IEnumerable<Auth> Auths { get; set; }
   }
 
   public class User : IUser
@@ -25,6 +25,6 @@ namespace ProductServer.Models
     [StringLength(60)]
     public string HashedPassword { get; set; }
 
-    public List<Auth> Auths { get; set; }
+    public IEnumerable<Auth> Auths { get; set; }
   }
 }

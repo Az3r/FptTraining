@@ -2,47 +2,45 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using ProductServer.DTOs;
 using ProductServer.Models;
 
 namespace ProductServer.Repositories
 {
-  public class ProductRepository<TEntity> where TEntity : class
+  public class ProductRepository : GenericRepository<Product>
   {
-    public ProductRepository(ProductContext context)
-    {
-      this.context = context;
-      Entities = context.Set<TEntity>();
-    }
+    public ProductRepository(ProductContext context) : base(context) { }
 
-    public void Create(TEntity entity)
+    public IEnumerable<Product> GetAll()
     {
-      Entities.Add(entity);
-    }
+      var products = Entities
+      .Include(p => p.Supplier)
+      .Include(p => p.Categories)
+      .AsNoTracking()
+      .Select(p => new Product
+      {
+        ID = p.ID,
+        Name = p.Name,
+        Price = p.Price,
+        Rating = p.Rating,
+        Supplier = new Supplier { Name = p.Supplier.Name },
+        Categories = p.Categories.Select(c => new Category { Name = c.Name })
+      })
+      .AsEnumerable();
 
-    public void Update(TEntity entity)
-    {
-      Entities.Update(entity);
-    }
-
-    public void Delete(object id)
-    {
-      TEntity found = Entities.Find(id);
-      if (found is not null) Entities.Remove(found);
-    }
-
-    public List<TEntity> Find(Func<TEntity, bool> filter, int size, int offset)
-    {
-      var products = Entities.Where(filter).Skip(offset * size).Take(size).ToList();
       return products;
     }
 
-    public void Save()
+    public Product GetProduct(Guid id)
     {
-      context.SaveChanges();
+      var product = Entities
+      .Include(p => p.ProductDetail)
+      .Include(p => p.Categories)
+      .Include(p => p.Supplier)
+      .AsNoTracking()
+      .Single(p => p.ID.Equals(id));
+
+      return product;
     }
-
-    private ProductContext context;
-    public readonly DbSet<TEntity> Entities;
   }
-
 }

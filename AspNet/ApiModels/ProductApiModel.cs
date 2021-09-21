@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ProductServer.Models;
 
 namespace ProductServer.ApiModels
 {
@@ -30,9 +31,6 @@ namespace ProductServer.ApiModels
 
   public class UpdateProductRequest
   {
-    [Required]
-    public Guid Id { get; set; }
-
     [MaxLength(200)]
     public string Name { get; set; }
 

@@ -18,7 +18,7 @@ namespace ProductServer.Models
     ProductDetail ProductDetail { get; set; }
     Guid SupplierID { get; set; }
     Supplier Supplier { get; set; }
-    List<Category> Categories { get; set; }
+    IEnumerable<Category> Categories { get; set; }
   }
 
   public class Product : IProduct
@@ -52,7 +52,7 @@ namespace ProductServer.Models
 
     public Supplier Supplier { get; set; }
 
-    public List<Category> Categories { get; set; }
+    public IEnumerable<Category> Categories { get; set; }
   }
 
 }

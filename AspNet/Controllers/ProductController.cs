@@ -1,74 +1,71 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using ProductServer.ApiModels;
-using ProductServer.Models;
+using ProductServer.DTOs;
+using ProductServer.Repositories;
+using ProductServer.Services;
 
 namespace ProductServer.Controllers
 {
   [Route("api/product")]
   [ApiController]
-  [Authorize]
   public class ProductController : ControllerBase
   {
-    public ProductController(ProductContext products)
+    public ProductController(IUnitOfWork worker, IDtoService mapper)
     {
-      ProductContext = products;
+      this.worker = worker;
+      this.mapper = mapper;
     }
 
     [HttpGet("all")]
-    public List<MockProduct> GetAllProducts()
+    public List<ProductMasterDto> GetAllProducts()
     {
-      using (StreamReader reader = new StreamReader("Mocks/products.json"))
-      {
-        string json = reader.ReadToEnd();
-        List<MockProduct> products = JsonConvert.DeserializeObject<List<MockProduct>>(json);
-        return products;
-      }
+      var products = worker.ProductRepository.GetAll();
+      var dtos = mapper.ToProductMaster(products);
+      return dtos;
     }
 
-    [HttpGet("find")]
-    public List<MockProduct> FindProducts(string name,
+    [HttpGet]
+    public List<ProductMasterDto> FindProducts(string name,
                                           string category,
                                           double minPrice,
                                           double maxPrice,
+                                          string order,
                                           int size = 20,
                                           int offset = 0)
     {
-      return new List<MockProduct>();
+      return new List<ProductMasterDto>();
     }
 
-    [HttpPost("create")]
+    [HttpGet("{id}")]
+    public ProductDetailDto GetProduct(Guid id)
+    {
+      var product = worker.ProductRepository.GetProduct(id);
+      var dto = mapper.ToProductDetail(product);
+
+      return dto;
+    }
+
+    [HttpPost]
     public IActionResult CreateProduct(CreateProductRequest body)
     {
       return Created(Guid.NewGuid().ToString(), body);
     }
 
-    [HttpPut("update")]
+    [HttpPut("{id}")]
     public IActionResult UpdateProduct(UpdateProductRequest body)
     {
       return Ok(body);
     }
 
-    [HttpDelete("delete/{id}")]
+    [HttpDelete("{id}")]
     public IActionResult DeleteProduct(Guid id)
     {
       return Ok();
     }
 
-    private readonly ProductContext ProductContext;
-  }
-
-  public class MockProduct
-  {
-    public string ID { get; set; }
-    public string Name { get; set; }
-    public double Price { get; set; }
-    public double Rating { get; set; }
-    public string Category { get; set; }
+    private readonly IUnitOfWork worker;
+    private readonly IDtoService mapper;
   }
 }

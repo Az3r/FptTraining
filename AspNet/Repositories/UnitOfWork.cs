@@ -10,9 +10,9 @@ namespace ProductServer.Repositories
     public UnitOfWork(ProductContext context)
     {
       this.context = context;
-      ProductRepository = new ProductRepository<Product>(context);
-      UserRepository = new ProductRepository<User>(context);
-      AuthRepository = new ProductRepository<Auth>(context);
+      ProductRepository = new ProductRepository(context);
+      UserRepository = new GenericRepository<User>(context);
+      AuthRepository = new GenericRepository<Auth>(context);
     }
 
     public void Save()
@@ -20,11 +20,11 @@ namespace ProductServer.Repositories
       context.SaveChanges();
     }
 
-    public ProductRepository<Product> ProductRepository { get; }
+    public ProductRepository ProductRepository { get; }
 
-    public ProductRepository<User> UserRepository { get; }
+    public GenericRepository<User> UserRepository { get; }
 
-    public ProductRepository<Auth> AuthRepository { get; }
+    public GenericRepository<Auth> AuthRepository { get; }
 
     private ProductContext context;
   }
@@ -32,9 +32,9 @@ namespace ProductServer.Repositories
   {
     void Save();
 
-    ProductRepository<Product> ProductRepository { get; }
-    ProductRepository<User> UserRepository { get; }
-    ProductRepository<Auth> AuthRepository { get; }
+    ProductRepository ProductRepository { get; }
+    GenericRepository<User> UserRepository { get; }
+    GenericRepository<Auth> AuthRepository { get; }
   }
 
 }
