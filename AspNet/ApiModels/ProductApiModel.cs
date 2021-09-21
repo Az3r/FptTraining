@@ -25,8 +25,6 @@ namespace ProductServer.ApiModels
 
     [Required]
     public List<Guid> CategoryIds { get; set; }
-
-    public string Details { get; set; }
   }
 
   public class UpdateProductRequest
@@ -44,7 +42,7 @@ namespace ProductServer.ApiModels
 
     public List<Guid> CategoryIds { get; set; }
 
-    public string Details { get; set; }
+    public string Detail { get; set; }
 
     public DateTime? DiscontinuedDate { get; set; }
   }

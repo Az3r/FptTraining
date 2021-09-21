@@ -12,10 +12,11 @@ namespace ProductServer.Controllers
   [ApiController]
   public class ProductController : ControllerBase
   {
-    public ProductController(IUnitOfWork worker, IDtoService mapper)
+    public ProductController(IUnitOfWork worker, IDtoService mapper, IRequestService transform)
     {
       this.worker = worker;
       this.mapper = mapper;
+      this.transform = transform;
     }
 
     [HttpGet("all")]
@@ -67,5 +68,6 @@ namespace ProductServer.Controllers
 
     private readonly IUnitOfWork worker;
     private readonly IDtoService mapper;
+    private readonly IRequestService transform;
   }
 }

@@ -82,6 +82,7 @@ namespace ProductServer
 
       // user defined services
       services.AddSingleton<IAuthService, AuthService>();
+      services.AddSingleton<IRequestService, RequestService>();
       services.AddSingleton<IDtoService, DtoService>();
 
     }
