@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using ProductServer.ApiModels;
+using ProductServer.DTOs;
 using ProductServer.Models;
 using ProductServer.Repositories;
 

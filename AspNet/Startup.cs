@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
+using System;
 
 namespace ProductServer
 {
@@ -55,7 +56,8 @@ namespace ProductServer
       });
 
       services.AddDbContext<ProductContext>(
-        options => options.UseSqlServer(Configuration.GetConnectionString("ProductDB")),
+        options => options
+          .UseSqlServer(Configuration.GetConnectionString("ProductDB")),
         ServiceLifetime.Singleton
       );
       services.AddSingleton<IUnitOfWork, UnitOfWork>();
@@ -80,6 +82,7 @@ namespace ProductServer
 
       // user defined services
       services.AddSingleton<IAuthService, AuthService>();
+      services.AddSingleton<IDtoService, DtoService>();
 
     }
 

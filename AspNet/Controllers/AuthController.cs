@@ -6,6 +6,7 @@ using ProductServer.Helpers;
 using ProductServer.Services;
 using ProductServer.Repositories;
 using ProductServer.Models;
+using ProductServer.DTOs;
 
 namespace ProductServer
 {
