@@ -6,8 +6,9 @@ namespace ProductServer.Models
 {
   public interface IAuth
   {
-    string RefreshToken { get; set; }
+    string Token { get; set; }
     Guid UserID { get; set; }
+    DateTime ExpirationTime { get; set; }
     DateTime? ActivatedAt { get; set; }
     User User { get; set; }
   }
@@ -15,10 +16,10 @@ namespace ProductServer.Models
   public class Auth : IAuth
   {
     [Key]
-    [MinLength(32)]
-    [MaxLength(128)]
-    public string RefreshToken { get; set; }
+    [StringLength(128)]
+    public string Token { get; set; }
     public Guid UserID { get; set; }
+    public DateTime ExpirationTime { get; set; }
     public DateTime? ActivatedAt { get; set; }
     public User User { get; set; }
   }

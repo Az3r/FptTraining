@@ -49,17 +49,12 @@ namespace ProductServer.ApiModels
   public class FindProductRequest
   {
     public string Name { get; set; } = "";
-    public string Category { get; set; } = "";
+    public List<string> Category { get; set; } = new List<string>();
     public double MinPrice { get; set; } = double.MinValue;
     public double MaxPrice { get; set; } = double.MaxValue;
-
-    public bool IsEmpty()
-    {
-      return (MaxPrice == double.MaxValue &&
-              MinPrice == double.MinValue &&
-              String.IsNullOrWhiteSpace(Name) &&
-              String.IsNullOrWhiteSpace(Category));
-    }
+    public int Size { get; set; } = 20;
+    public int Offset { get; set; } = 0;
+    public string Sort { get; set; } = "name:asc,id:asc";
   }
 
 }

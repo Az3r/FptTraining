@@ -14,36 +14,34 @@ namespace ProductServer.Controllers
   {
     public ProductController(IUnitOfWork worker, IDtoService mapper, IRequestService transform)
     {
-      this.worker = worker;
-      this.mapper = mapper;
-      this.transform = transform;
+      this.database = worker;
+      this.dtoService = mapper;
+      this.requestService = transform;
     }
 
     [HttpGet("all")]
     public List<ProductMasterDto> GetAllProducts()
     {
-      var products = worker.ProductRepository.GetAll();
-      var dtos = mapper.ToProductMaster(products);
+      var products = database.ProductRepository.GetAll();
+      var dtos = dtoService.ToProductMaster(products);
       return dtos;
     }
 
     [HttpGet]
-    public List<ProductMasterDto> FindProducts(string name,
-                                          string category,
-                                          double minPrice,
-                                          double maxPrice,
-                                          string order,
-                                          int size = 20,
-                                          int offset = 0)
+    public List<ProductMasterDto> FindProducts([FromQuery] FindProductRequest query)
     {
-      return new List<ProductMasterDto>();
+      var filter = requestService.ToProductFilter(query);
+      var sort = requestService.ToProductOrder(query);
+      var products = database.ProductRepository.Find(filter, sort, query.Size, query.Offset);
+      var dtos = dtoService.ToProductMaster(products);
+      return dtos;
     }
 
     [HttpGet("{id}")]
     public ProductDetailDto GetProduct(Guid id)
     {
-      var product = worker.ProductRepository.GetProduct(id);
-      var dto = mapper.ToProductDetail(product);
+      var product = database.ProductRepository.GetProduct(id);
+      var dto = dtoService.ToProductDetail(product);
 
       return dto;
     }
@@ -51,23 +49,30 @@ namespace ProductServer.Controllers
     [HttpPost]
     public IActionResult CreateProduct(CreateProductRequest body)
     {
-      return Created(Guid.NewGuid().ToString(), body);
+      var product = requestService.ToProduct(body);
+      database.ProductRepository.Create(product);
+      var dto = dtoService.ToProductDetail(product);
+      return Created($"product/{product.ID}", dto);
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateProduct(UpdateProductRequest body)
+    public IActionResult UpdateProduct(Guid id, UpdateProductRequest body)
     {
-      return Ok(body);
+      var product = requestService.ToProduct(id, body);
+      database.ProductRepository.Update(product);
+      var dto = dtoService.ToProductDetail(product);
+      return Ok(dto);
     }
 
     [HttpDelete("{id}")]
     public IActionResult DeleteProduct(Guid id)
     {
+      database.ProductRepository.Delete(id);
       return Ok();
     }
 
-    private readonly IUnitOfWork worker;
-    private readonly IDtoService mapper;
-    private readonly IRequestService transform;
+    private readonly IUnitOfWork database;
+    private readonly IDtoService dtoService;
+    private readonly IRequestService requestService;
   }
 }

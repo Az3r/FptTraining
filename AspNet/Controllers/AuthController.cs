@@ -25,11 +25,27 @@ namespace ProductServer
     [HttpPost("login")]
     public IActionResult Login(LoginRequest body)
     {
-      AuthTokenDto tokens = auth.CreateJwtToken(new Models.User()
+      string hashedPassword = auth.HashPassword(body.Password, body.DisplayName);
+      User user = worker.UserRepository.Verify(body.DisplayName, hashedPassword);
+
+      if (user is null)
       {
-        ID = Guid.NewGuid(),
-        DisplayName = body.DisplayName
+        return NotFound(ApiHelper.Failure("user_not_found", "unable to find user with provided arguments"));
+      }
+
+      AuthTokenDto tokens = new AuthTokenDto
+      {
+        AccessToken = auth.CreateJwtToken(user),
+        RefreshToken = auth.GenerateRandomToken()
+      };
+
+      worker.AuthRepository.Create(new Auth
+      {
+        UserID = user.ID,
+        ExpirationTime = DateTime.UtcNow.AddDays(30),
+        Token = tokens.RefreshToken
       });
+      worker.Save();
 
       return Ok(ApiHelper.Success(tokens));
     }
@@ -38,19 +54,39 @@ namespace ProductServer
     public IActionResult RefreshToken([FromQuery(Name = "token")] string value)
     {
       // verify provided value
-      VerifyTokenResult result = auth.VerifyRefreshToken(value, out Auth token);
-      if (result != VerifyTokenResult.OK)
-        return BadRequest(ApiHelper.Failure(
-          result == VerifyTokenResult.UNIDENTIFIED ? "unidentified_refresh_token" : "activated_refresh_token",
-          "provided token is invalid",
-          new { Value = value }
+      Auth found = worker.AuthRepository.Find(value);
+      if (found is null)
+        return NotFound(ApiHelper.Failure(
+          "refresh_token_not_found",
+          "unable to find provided refresh token"
         ));
-      auth.ActivateRefreshToken(token);
 
-      // generate new pair of access token and refresh token
-      var dto = auth.CreateJwtToken(token.User);
-      auth.StoreRefreshToken(new Auth() { UserID = token.User.ID, RefreshToken = dto.RefreshToken });
-      return Ok(ApiHelper.Success(dto));
+      if (found.ActivatedAt is not null) return BadRequest(ApiHelper.Failure(
+        "refresh_token_activated",
+        "provided refresh token has been activated",
+        new
+        {
+          ActivatedAt = found.ActivatedAt
+        }
+      ));
+
+
+      worker.AuthRepository.Activate(found);
+      AuthTokenDto tokens = new AuthTokenDto
+      {
+        AccessToken = auth.CreateJwtToken(new Models.User { ID = found.UserID }),
+        RefreshToken = auth.GenerateRandomToken()
+      };
+
+      worker.AuthRepository.Create(new Auth
+      {
+        UserID = found.UserID,
+        ExpirationTime = DateTime.UtcNow.AddDays(30),
+        Token = tokens.RefreshToken
+      });
+      worker.Save();
+
+      return Ok(ApiHelper.Success(tokens));
     }
 
     private IAuthService auth;

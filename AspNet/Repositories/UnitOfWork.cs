@@ -4,15 +4,14 @@ using ProductServer.Models;
 
 namespace ProductServer.Repositories
 {
-
   public class UnitOfWork : IUnitOfWork
   {
     public UnitOfWork(ProductContext context)
     {
       this.context = context;
       ProductRepository = new ProductRepository(context);
-      UserRepository = new GenericRepository<User>(context);
-      AuthRepository = new GenericRepository<Auth>(context);
+      UserRepository = new UserRepository(context);
+      AuthRepository = new AuthRepository(context);
     }
 
     public void Save()
@@ -22,9 +21,9 @@ namespace ProductServer.Repositories
 
     public ProductRepository ProductRepository { get; }
 
-    public GenericRepository<User> UserRepository { get; }
+    public UserRepository UserRepository { get; }
 
-    public GenericRepository<Auth> AuthRepository { get; }
+    public AuthRepository AuthRepository { get; }
 
     private ProductContext context;
   }
@@ -33,8 +32,8 @@ namespace ProductServer.Repositories
     void Save();
 
     ProductRepository ProductRepository { get; }
-    GenericRepository<User> UserRepository { get; }
-    GenericRepository<Auth> AuthRepository { get; }
+    UserRepository UserRepository { get; }
+    AuthRepository AuthRepository { get; }
   }
 
 }
