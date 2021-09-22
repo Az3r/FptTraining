@@ -4,6 +4,17 @@ using ProductServer.Models;
 
 namespace ProductServer.Repositories
 {
+  public interface IUnitOfWork
+  {
+    ProductRepository ProductRepository { get; }
+    UserRepository UserRepository { get; }
+    AuthRepository AuthRepository { get; }
+    GenericRepository<Category> CategoryRepository { get; }
+    GenericRepository<Supplier> SupplierRepository { get; }
+
+    void Save();
+  }
+
   public class UnitOfWork : IUnitOfWork
   {
     public UnitOfWork(ProductContext context)
@@ -12,6 +23,8 @@ namespace ProductServer.Repositories
       ProductRepository = new ProductRepository(context);
       UserRepository = new UserRepository(context);
       AuthRepository = new AuthRepository(context);
+      CategoryRepository = new GenericRepository<Category>(context);
+      SupplierRepository = new GenericRepository<Supplier>(context);
     }
 
     public void Save()
@@ -24,16 +37,10 @@ namespace ProductServer.Repositories
     public UserRepository UserRepository { get; }
 
     public AuthRepository AuthRepository { get; }
+    public GenericRepository<Category> CategoryRepository { get; }
+    public GenericRepository<Supplier> SupplierRepository { get; }
 
     private ProductContext context;
-  }
-  public interface IUnitOfWork
-  {
-    void Save();
-
-    ProductRepository ProductRepository { get; }
-    UserRepository UserRepository { get; }
-    AuthRepository AuthRepository { get; }
   }
 
 }

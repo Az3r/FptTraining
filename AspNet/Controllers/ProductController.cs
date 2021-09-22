@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductServer.ApiModels;
 using ProductServer.DTOs;
@@ -10,6 +11,7 @@ namespace ProductServer.Controllers
 {
   [Route("api/product")]
   [ApiController]
+  [Authorize]
   public class ProductController : ControllerBase
   {
     public ProductController(IUnitOfWork worker, IDtoService mapper, IRequestService transform)

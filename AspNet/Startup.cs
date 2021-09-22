@@ -57,10 +57,8 @@ namespace ProductServer
 
       services.AddDbContext<ProductContext>(
         options => options
-          .UseSqlServer(Configuration.GetConnectionString("ProductDB")),
-        ServiceLifetime.Singleton
+          .UseSqlServer(Configuration.GetConnectionString("ProductDB"))
       );
-      services.AddSingleton<IUnitOfWork, UnitOfWork>();
       services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
@@ -81,6 +79,7 @@ namespace ProductServer
 
 
       // user defined services
+      services.AddScoped<IUnitOfWork, UnitOfWork>();
       services.AddSingleton<IAuthService, AuthService>();
       services.AddSingleton<IRequestService, RequestService>();
       services.AddSingleton<IDtoService, DtoService>();
