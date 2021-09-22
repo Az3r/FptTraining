@@ -16,6 +16,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatToolbarModule } from '@angular/material/toolbar';
+
 
 @NgModule({
   declarations: [
@@ -55,7 +57,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatCheckboxModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatToolbarModule
   ]
 })
 export class SharedModule { }
