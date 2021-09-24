@@ -11,7 +11,6 @@ namespace ProductServer.Controllers
 {
   [Route("api/product")]
   [ApiController]
-  [Authorize]
   public class ProductController : ControllerBase
   {
     public ProductController(IUnitOfWork worker, IDtoService mapper, IRequestService transform)

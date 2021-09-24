@@ -96,6 +96,7 @@ namespace ProductServer
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductServer v1"));
       }
 
+      app.UseCors(options => options.AllowAnyOrigin());
       app.UseRouting();
 
       app.UseAuthentication();

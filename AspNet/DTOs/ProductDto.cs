@@ -14,7 +14,7 @@ namespace ProductServer.DTOs
       this.Id = product.ID;
       this.Supplier = product.Supplier.Name;
       this.Description = product.Description;
-      this.ReleaseDate = product.ReleaseDate;
+      this.ReleasedDate = product.ReleaseDate;
       this.Rating = product.Rating;
       this.Price = product.Price;
       this.DiscontinuedDate = product.DiscontinuedDate;
@@ -26,7 +26,7 @@ namespace ProductServer.DTOs
     public Guid Id { get; set; }
     public string Supplier { get; set; }
     public string Description { get; set; }
-    public DateTime ReleaseDate { get; set; }
+    public DateTime ReleasedDate { get; set; }
     public short Rating { get; set; }
     public double Price { get; set; }
     public List<string> Categories { get; set; }
