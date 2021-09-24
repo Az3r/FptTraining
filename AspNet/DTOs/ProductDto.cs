@@ -12,24 +12,24 @@ namespace ProductServer.DTOs
     {
       this.Name = product.Name;
       this.Id = product.ID;
-      this.Supplier = product.Supplier.Name;
+      this.Supplier = product.Supplier;
       this.Description = product.Description;
       this.ReleasedDate = product.ReleaseDate;
       this.Rating = product.Rating;
       this.Price = product.Price;
       this.DiscontinuedDate = product.DiscontinuedDate;
-      this.Categories = product.Categories.Select(c => c.Name).ToList();
+      this.Categories = product.Categories.ToList();
       this.Detail = product.ProductDetail.Detail;
     }
 
     public string Name { get; set; }
     public Guid Id { get; set; }
-    public string Supplier { get; set; }
+    public Supplier Supplier { get; set; }
     public string Description { get; set; }
     public DateTime ReleasedDate { get; set; }
     public short Rating { get; set; }
     public double Price { get; set; }
-    public List<string> Categories { get; set; }
+    public List<Category> Categories { get; set; }
     public DateTime? DiscontinuedDate { get; set; }
     public string Detail { get; set; }
   }

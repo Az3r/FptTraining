@@ -9,7 +9,6 @@ using ProductServer.Services;
 namespace ProductServer.Controllers
 {
   [ApiController]
-  [Authorize]
   [Route("api")]
   public class CommonCOntroller : ControllerBase
   {

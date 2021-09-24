@@ -38,6 +38,19 @@ namespace ProductServer.Repositories
       .Include(p => p.Categories)
       .Include(p => p.Supplier)
       .AsNoTracking()
+      .Select(p => new Product
+      {
+        ID = p.ID,
+        Name = p.Name,
+        Description = p.Description,
+        Price = p.Price,
+        Rating = p.Rating,
+        ReleaseDate = p.ReleaseDate,
+        DiscontinuedDate = p.DiscontinuedDate,
+        ProductDetail = p.ProductDetail,
+        Supplier = new Supplier { ID = p.Supplier.ID, Name = p.Supplier.Name },
+        Categories = p.Categories.Select(c => new Category { ID = c.ID, Name = c.Name })
+      })
       .SingleOrDefault(p => p.ID.Equals(id));
 
       return product;
