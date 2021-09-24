@@ -20,6 +20,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatRadioModule } from '@angular/material/radio';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatToolbarModule,
     MatTooltipModule,
     MatDividerModule,
-    MatRadioModule
+    MatRadioModule,
+    HttpClientModule
   ]
 })
 export class SharedModule { }

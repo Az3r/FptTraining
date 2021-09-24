@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
+import { ActivatedRoute } from '@angular/router';
+import { IProductDetail } from 'src/app/shared/product';
+import { ProductService } from '../product.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -10,10 +11,24 @@ import { ProductDialogComponent } from '../product-dialog/product-dialog.compone
 export class ProductDetailComponent implements OnInit {
 
   editting: boolean = false
+  id: string | null
+  product: IProductDetail
 
-  constructor(public dialog: MatDialog) { }
+  constructor(
+    private productService: ProductService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
+    this.id = this.route.snapshot.paramMap.get('id')
+    if (this.id) {
+      this.productService.getProduct(this.id).subscribe(item => {
+        if (item) {
+          this.product = item
+          console.log(this.product)
+        }
+      })
+    }
   }
 
   edit() {

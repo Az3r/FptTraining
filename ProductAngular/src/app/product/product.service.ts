@@ -29,7 +29,9 @@ export class ProductService {
 
   getProduct(id: string) {
     return this.http.get<IProductDetail>(`${this.url}/${id}`)
-      .pipe(catchError((err) => this.onError("getProduct", err)));
+      .pipe<IProductDetail | undefined>(
+        catchError((err) => this.onError<IProductDetail>("getProduct", err))
+      );
   }
 
   updateProduct(id: string, data: Omit<IProductDetail, "id">) {

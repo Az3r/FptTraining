@@ -3,13 +3,13 @@ export interface IProductMaster {
   name: string,
   price: number,
   rating: number,
-  category: string,
+  categories: string[],
   supplier: string,
   description: string,
 }
 
 export interface IProductDetail extends IProductMaster {
   detail: string
-  releasedAt: Date,
+  releasedDate: Date,
   discontinuedAt?: Date,
 }

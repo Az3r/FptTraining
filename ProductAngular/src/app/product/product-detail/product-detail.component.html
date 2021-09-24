@@ -65,42 +65,52 @@
   <ng-template #dataRoot>
     <div class="dataRoot">
       <h1>
-        {{"the name of this product" | titlecase}}
+        {{product?.name| titlecase}}
       </h1>
       <h3>
         {{"id" | titlecase}}
         :
-        shit
+        {{product?.id}}
       </h3>
       <h3>
         {{"description" | titlecase}}
         :
-        shit
+        {{product?.description}}
       </h3>
       <h3>
         {{"category" | titlecase}}
         :
-        shit
+        {{product?.categories?.join(', ')}}
       </h3>
       <h3>
         {{"supplier" | titlecase}}
         :
+        {{product?.supplier}}
       </h3>
       <h3>
         {{"price" | titlecase}}
         :
+        {{product?.price?.toFixed(2)}}
       </h3>
       <h3>
         {{"rating" | titlecase}}
         :
+        {{product?.rating}}
       </h3>
       <h3>
         {{"release" | titlecase}}
         :
+        {{product?.releasedDate | date:'long'}}
       </h3>
       <h3>
         {{"status" | titlecase}}
         :
+        <ng-template *ngIf="product?.discontinuedAt else available">
+          {{product?.discontinuedAt | date:'long'}}
+        </ng-template>
+        <ng-template #available>
+          Available
+        </ng-template>
       </h3>
       <h1>{{"about this product" | titlecase}}</h1>
       <p class="mat-body">Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint
