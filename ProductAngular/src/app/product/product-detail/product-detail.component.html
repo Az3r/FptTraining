@@ -1,60 +1,54 @@
 <div class="root">
   <div *ngIf="editting; else dataRoot">
-    <button mat-icon-button matTooltip="Cancel editting" (click)="editting = false">
+    <button mat-icon-button matTooltip="Cancel editting" (click)="editProduct(false)">
       <mat-icon>close</mat-icon>
     </button>
-    <form>
+    <form [formGroup]="productForm">
       <mat-form-field>
         <mat-label>
           {{"name" | titlecase}}
         </mat-label>
-        <input matInput>
+        <input required matInput formControlName="name">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>{{"description" | titlecase }}</mat-label>
-        <textarea matInput rows="3"></textarea>
+        <textarea matInput rows="3" formControlName="description"></textarea>
       </mat-form-field>
-      <mat-form-field>
-        <mat-label>
-          {{"category" | titlecase}}
-        </mat-label>
-        <mat-select>
-          <mat-option>Hello</mat-option>
-          <mat-option>World</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div formArrayName="categories">
+        <mat-checkbox *ngFor="let category of categories; index as i" [formControlName]="i">{{category.name |
+          titlecase}}</mat-checkbox>
+      </div>
       <mat-form-field>
         <mat-label>
           {{"supplier" | titlecase}}
         </mat-label>
-        <mat-select>
-          <mat-option>Hello</mat-option>
-          <mat-option>World</mat-option>
+        <mat-select formControlName="supplier">
+          <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field>
         <mat-label>
           {{"price" | titlecase}}
         </mat-label>
-        <input matInput type="number">
+        <input matInput type="number" formControlName="price">
       </mat-form-field>
       <mat-form-field>
         <mat-label>
           {{"release date" | titlecase}}
         </mat-label>
-        <input matInput [matDatepicker]="release_date_picker">
+        <input matInput [matDatepicker]="release_date_picker" formControlName="releasedDate">
         <mat-datepicker-toggle matSuffix [for]="release_date_picker"></mat-datepicker-toggle>
         <mat-datepicker #release_date_picker></mat-datepicker>
       </mat-form-field>
       <mat-form-field>
         <mat-label>{{"discontinued date" | titlecase}}</mat-label>
-        <input matInput [matDatepicker]="discontinue_date_picker">
+        <input matInput [matDatepicker]="discontinue_date_picker" formControlName="discontinuedDate">
         <mat-datepicker-toggle matSuffix [for]="discontinue_date_picker"></mat-datepicker-toggle>
         <mat-datepicker #discontinue_date_picker></mat-datepicker>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>{{"details" | titlecase }}</mat-label>
-        <textarea matInput rows="10"></textarea>
+        <textarea matInput rows="10" formControlName="detail"></textarea>
       </mat-form-field>
       <div class="edit-actions">
         <button mat-raised-button color='warn'>{{"delete this product"| titlecase}}</button>
@@ -63,70 +57,60 @@
     </form>
   </div>
   <ng-template #dataRoot>
-    <div class="dataRoot">
+    <div class="dataRoot" *ngIf="product">
       <h1>
-        {{product?.name| titlecase}}
+        {{product.name| titlecase}}
       </h1>
       <h3>
         {{"id" | titlecase}}
         :
-        {{product?.id}}
+        {{product.id}}
       </h3>
       <h3>
         {{"description" | titlecase}}
         :
-        {{product?.description}}
+        {{product.description}}
       </h3>
       <h3>
         {{"category" | titlecase}}
         :
-        {{product?.categories?.join(', ')}}
+        {{toCategoryNames()}}
       </h3>
       <h3>
         {{"supplier" | titlecase}}
         :
-        {{product?.supplier}}
+        {{product.supplier.name}}
       </h3>
       <h3>
         {{"price" | titlecase}}
         :
-        {{product?.price?.toFixed(2)}}
+        {{product.price?.toFixed(2)}}
       </h3>
       <h3>
         {{"rating" | titlecase}}
         :
-        {{product?.rating}}
+        {{product.rating}}
       </h3>
       <h3>
         {{"release" | titlecase}}
         :
-        {{product?.releasedDate | date:'long'}}
+        {{product.releasedDate | date:'longDate'}}
       </h3>
       <h3>
         {{"status" | titlecase}}
         :
-        <ng-template *ngIf="product?.discontinuedAt else available">
-          {{product?.discontinuedAt | date:'long'}}
+        <ng-template *ngIf="product.discontinuedDate else available">
+          {{product.discontinuedDate | date:'longDate'}}
         </ng-template>
         <ng-template #available>
           Available
         </ng-template>
       </h3>
       <h1>{{"about this product" | titlecase}}</h1>
-      <p class="mat-body">Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint
-        ad
-        nisi
-        Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud
-        nostrud
-        ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut
-        officia.
-        Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat
-        officia
-        voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
-        reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea
-        consectetur et est culpa et culpa duis.
+      <p class="mat-body">
+        {{product.detail}}
       </p>
-      <button mat-fab (click)="edit()">
+      <button mat-fab (click)="editProduct(true)">
         <mat-icon>edit</mat-icon>
       </button>
     </div>

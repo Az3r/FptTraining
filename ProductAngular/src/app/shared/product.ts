@@ -8,8 +8,25 @@ export interface IProductMaster {
   description: string,
 }
 
-export interface IProductDetail extends IProductMaster {
+export interface IProductDetail {
+  id: string,
+  name: string,
+  price: number,
+  rating: number,
+  categories: ICategory[],
+  supplier: ISupplier,
+  description: string,
   detail: string
   releasedDate: Date,
-  discontinuedAt?: Date,
+  discontinuedDate?: Date,
+}
+
+export interface ICategory {
+  id: string,
+  name: string
+}
+
+export interface ISupplier {
+  id: string,
+  name: string
 }

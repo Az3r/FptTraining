@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { IProductDetail, IProductMaster } from '../shared/product';
+import { ICategory, IProductDetail, IProductMaster, ISupplier } from '../shared/product';
 import { stringify } from 'qs'
 import { catchError } from 'rxjs/operators'
 import { of, throwError } from 'rxjs';
@@ -42,6 +42,20 @@ export class ProductService {
   deleteProduct(id: string) {
     return this.http.delete(`${this.url}/delete/${id}`)
       .pipe(catchError((err) => this.onError("deleteProduct", err)));
+  }
+
+  getCategories() {
+    return this.http.get<ICategory[]>(`${environment.apiUrl}/category/all`)
+      .pipe<ICategory[] | undefined>(
+        catchError((err) => this.onError<ICategory[]>("getCategories", err))
+      );
+  }
+
+  getSuppliers() {
+    return this.http.get<ISupplier[]>(`${environment.apiUrl}/supplier/all`)
+      .pipe<ISupplier[] | undefined>(
+        catchError((err) => this.onError<ISupplier[]>("getCategories", err))
+      );
   }
 
   onError<T>(operation: string, error: any, fallback?: T) {

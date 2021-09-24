@@ -1,7 +1,7 @@
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -66,7 +66,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatTooltipModule,
     MatDividerModule,
     MatRadioModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ]
 })
 export class SharedModule { }
