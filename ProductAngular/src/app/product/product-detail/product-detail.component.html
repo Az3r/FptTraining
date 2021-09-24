@@ -1,52 +1,124 @@
-<h1>
-  {{"the name of this product" | titlecase}}
-</h1>
-<h3>
-  <mat-icon inline style="visibility: hidden">category</mat-icon>
-  {{"id" | titlecase}}
-  :
-  shit
-</h3>
-<h3>
-  <mat-icon inline>category</mat-icon>
-  {{"category" | titlecase}}
-  :
-  shit
-</h3>
-<h3>
-  <mat-icon inline>precision_manufacturing</mat-icon>
-  {{"supplier" | titlecase}}
-  :
-</h3>
-<h3>
-  <mat-icon inline>sell</mat-icon>
-  {{"price" | titlecase}}
-  :
-</h3>
-<h3>
-  <mat-icon inline>star</mat-icon>
-  {{"rating" | titlecase}}
-  :
-</h3>
-<h3>
-  <mat-icon inline>schedule</mat-icon>
-  {{"release" | titlecase}}
-  :
-</h3>
-<h3>
-  <mat-icon inline>error</mat-icon>
-  {{"status" | titlecase}}
-  :
-</h3>
-<h1>{{"product's detail" | titlecase}}</h1>
-<p class="mat-body">Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi
-  Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud
-  ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia.
-  Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia
-  voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
-  reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea
-  consectetur et est culpa et culpa duis.
-</p>
-<button mat-fab (click)="edit()">
-  <mat-icon>edit</mat-icon>
-</button>
+<div class="root">
+  <div *ngIf="editting; else dataRoot">
+    <button mat-icon-button matTooltip="Cancel editting" (click)="editting = false">
+      <mat-icon>close</mat-icon>
+    </button>
+    <form>
+      <mat-form-field>
+        <mat-label>
+          {{"name" | titlecase}}
+        </mat-label>
+        <input matInput>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{"description" | titlecase }}</mat-label>
+        <textarea matInput rows="3"></textarea>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>
+          {{"category" | titlecase}}
+        </mat-label>
+        <mat-select>
+          <mat-option>Hello</mat-option>
+          <mat-option>World</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>
+          {{"supplier" | titlecase}}
+        </mat-label>
+        <mat-select>
+          <mat-option>Hello</mat-option>
+          <mat-option>World</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>
+          {{"price" | titlecase}}
+        </mat-label>
+        <input matInput type="number">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>
+          {{"release date" | titlecase}}
+        </mat-label>
+        <input matInput [matDatepicker]="release_date_picker">
+        <mat-datepicker-toggle matSuffix [for]="release_date_picker"></mat-datepicker-toggle>
+        <mat-datepicker #release_date_picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{"discontinued date" | titlecase}}</mat-label>
+        <input matInput [matDatepicker]="discontinue_date_picker">
+        <mat-datepicker-toggle matSuffix [for]="discontinue_date_picker"></mat-datepicker-toggle>
+        <mat-datepicker #discontinue_date_picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{"details" | titlecase }}</mat-label>
+        <textarea matInput rows="10"></textarea>
+      </mat-form-field>
+      <div class="edit-actions">
+        <button mat-raised-button color='warn'>{{"delete this product"| titlecase}}</button>
+        <button mat-raised-button color='primary'>{{"submit"| titlecase}}</button>
+      </div>
+    </form>
+  </div>
+  <ng-template #dataRoot>
+    <div class="dataRoot">
+      <h1>
+        {{"the name of this product" | titlecase}}
+      </h1>
+      <h3>
+        {{"id" | titlecase}}
+        :
+        shit
+      </h3>
+      <h3>
+        {{"description" | titlecase}}
+        :
+        shit
+      </h3>
+      <h3>
+        {{"category" | titlecase}}
+        :
+        shit
+      </h3>
+      <h3>
+        {{"supplier" | titlecase}}
+        :
+      </h3>
+      <h3>
+        {{"price" | titlecase}}
+        :
+      </h3>
+      <h3>
+        {{"rating" | titlecase}}
+        :
+      </h3>
+      <h3>
+        {{"release" | titlecase}}
+        :
+      </h3>
+      <h3>
+        {{"status" | titlecase}}
+        :
+      </h3>
+      <h1>{{"about this product" | titlecase}}</h1>
+      <p class="mat-body">Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint
+        ad
+        nisi
+        Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud
+        nostrud
+        ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut
+        officia.
+        Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat
+        officia
+        voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
+        reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea
+        consectetur et est culpa et culpa duis.
+      </p>
+      <button mat-fab (click)="edit()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+  </ng-template>
+</div>

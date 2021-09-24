@@ -9,13 +9,15 @@ import { ProductDialogComponent } from '../product-dialog/product-dialog.compone
 })
 export class ProductDetailComponent implements OnInit {
 
+  editting: boolean = false
+
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
 
   edit() {
-    this.dialog.open(ProductDialogComponent, { width: "640px", height: "600px" })
+    this.editting = true;
   }
 
 }

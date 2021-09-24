@@ -111,7 +111,7 @@ export class ProductComponent implements OnInit {
 
   columns: string[] = ["name", "supplier", "category", "price", "rating"]
 
-  advanceSearch: boolean = true;
+  advanceSearch: boolean = false;
 
 
 
