@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateProductDialog } from '../create-product-dialog/create-product-dialog.component';
@@ -5,7 +6,23 @@ import { CreateProductDialog } from '../create-product-dialog/create-product-dia
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.sass']
+  styleUrls: ['./product.component.sass'],
+  animations: [
+    trigger("advance-search-field", [
+      state("expanded", style({
+        height: 550,
+      })),
+      state("collapsed", style({
+        height: 0,
+      })),
+      transition("expanded => collapsed", [
+        animate("300ms 0ms ease-out")
+      ]),
+      transition("collapsed => expanded", [
+        animate("300ms 0ms ease-in")
+      ])
+    ])
+  ]
 })
 export class ProductComponent implements OnInit {
 
@@ -94,6 +111,8 @@ export class ProductComponent implements OnInit {
 
   columns: string[] = ["name", "supplier", "category", "price", "rating"]
 
+  advanceSearch: boolean = true;
+
 
 
   constructor(
@@ -105,6 +124,10 @@ export class ProductComponent implements OnInit {
 
   create() {
     this.dialog.open(CreateProductDialog, { width: "640px" })
+  }
+
+  toggleAdvanceSearch(value: boolean) {
+    this.advanceSearch = value
   }
 
 }

@@ -1,42 +1,111 @@
-<mat-form-field floatLabel="never">
-  <mat-placeholder>find products by name, category or price range...</mat-placeholder>
-  <input matInput>
-</mat-form-field>
-<button mat-raised-button>
-  {{"search" | uppercase}}
-</button>
-<table mat-table [dataSource]="products" class="mat-elevation-z8">
+<div class="root">
+  <div class="search-field">
+    <div class="basic-search-field">
+      <button mat-icon-button matTooltip="Advance search" aria-label="open advance search"
+        (click)="toggleAdvanceSearch(!advanceSearch)">
+        <mat-icon>filter_alt</mat-icon>
+      </button>
+      <mat-form-field floatLabel="never">
+        <mat-placeholder>Find your products by name...</mat-placeholder>
+        <input matInput>
+      </mat-form-field>
+      <button mat-raised-button>
+        {{"search" | uppercase}}
+      </button>
+    </div>
+    <div [@advance-search-field]="advanceSearch? 'expanded' : 'collapsed'" class="expand-search-field">
+      <mat-divider></mat-divider>
+      <div class="category-filter">
+        <h2>Category</h2>
+        <mat-checkbox>{{"title"}}</mat-checkbox>
+      </div>
+      <div class="price-filter">
+        <h2>Price</h2>
+        <mat-form-field floatLabel="never">
+          <mat-placeholder>{{"min price" | titlecase}}</mat-placeholder>
+          <input matInput type='number'>
+        </mat-form-field>
+        <div style="display: inline-block;width: 1rem"></div>
+        <mat-form-field floatLabel="never">
+          <mat-placeholder>{{"max price" | titlecase}}</mat-placeholder>
+          <input matInput type='number'>
+        </mat-form-field>
+      </div>
+      <div class="sorting">
+        <h2>Sorting</h2>
+        <div class="sorting-field">
+          <span class="mat-h3">{{"name" | titlecase}}</span>
+          <mat-radio-group name="name" value="asc">
+            <mat-radio-button value="asc" [checked]="true">Ascending</mat-radio-button>
+            <mat-radio-button value="desc">Descending</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="sorting-field">
+          <span class="mat-h3">{{"category" | titlecase}}</span>
+          <mat-radio-group name="category" value="asc">
+            <mat-radio-button value="asc" [checked]="true">Ascending</mat-radio-button>
+            <mat-radio-button value="desc">Descending</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="sorting-field">
+          <span class="mat-h3">{{"supplier" | titlecase}}</span>
+          <mat-radio-group name="supplier" value="asc">
+            <mat-radio-button value="asc" [checked]="true">Ascending</mat-radio-button>
+            <mat-radio-button value="desc">Descending</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="sorting-field">
+          <span class="mat-h3">{{"price" | titlecase}}</span>
+          <mat-radio-group name="price" value="asc">
+            <mat-radio-button value="asc" [checked]="true">Ascending</mat-radio-button>
+            <mat-radio-button value="desc">Descending</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="sorting-field">
+          <span class="mat-h3">{{"rating" | titlecase}}</span>
+          <mat-radio-group name="rating" value="asc">
+            <mat-radio-button value="asc" [checked]="true">Ascending</mat-radio-button>
+            <mat-radio-button value="desc">Descending</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <table mat-table [dataSource]="products" class="mat-elevation-z8">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
 
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-  </ng-container>
+      <ng-container matColumnDef="supplier">
+        <th mat-header-cell *matHeaderCellDef> Supplier </th>
+        <td mat-cell *matCellDef="let element"> {{element.supplier}} </td>
+      </ng-container>
 
-  <ng-container matColumnDef="supplier">
-    <th mat-header-cell *matHeaderCellDef> Supplier </th>
-    <td mat-cell *matCellDef="let element"> {{element.supplier}} </td>
-  </ng-container>
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef> Category </th>
+        <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+      </ng-container>
 
-  <ng-container matColumnDef="category">
-    <th mat-header-cell *matHeaderCellDef> Category </th>
-    <td mat-cell *matCellDef="let element"> {{element.category}} </td>
-  </ng-container>
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef> Price </th>
+        <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+      </ng-container>
 
-  <ng-container matColumnDef="price">
-    <th mat-header-cell *matHeaderCellDef> Price </th>
-    <td mat-cell *matCellDef="let element"> {{element.price}} </td>
-  </ng-container>
+      <ng-container matColumnDef="rating">
+        <th mat-header-cell *matHeaderCellDef> Rating </th>
+        <td mat-cell *matCellDef="let element"> {{element.rating}} </td>
+      </ng-container>
 
-  <ng-container matColumnDef="rating">
-    <th mat-header-cell *matHeaderCellDef> Rating </th>
-    <td mat-cell *matCellDef="let element"> {{element.rating}} </td>
-  </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr class="row-hover" mat-row *matRowDef="let row; columns: columns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </div>
 
-  <tr mat-header-row *matHeaderRowDef="columns"></tr>
-  <tr class="row-hover" mat-row *matRowDef="let row; columns: columns;"></tr>
-</table>
-<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
-</mat-paginator>
+</div>
 <button mat-fab (click)="create()">
   <mat-icon>add</mat-icon>
 </button>

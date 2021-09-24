@@ -17,6 +17,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 @NgModule({
@@ -58,7 +61,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatDatepickerModule,
     MatNativeDateModule,
     MatPaginatorModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatTooltipModule,
+    MatDividerModule,
+    MatRadioModule
   ]
 })
 export class SharedModule { }

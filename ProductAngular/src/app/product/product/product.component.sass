@@ -1,3 +1,5 @@
+.root
+  margin: 1rem 0 0 0
 table
   width: 100%
 
@@ -5,3 +7,46 @@ tr[mat-row]:hover
   background-color: rgba(0,0,0,0.05)
   cursor: pointer
 
+.mat-fab
+  position: fixed
+  right: 1rem
+  bottom: 1rem
+
+.search-field
+  width: 100%
+  max-width: 800px
+  margin: 1rem auto
+
+.basic-search-field
+  display: flex
+  align-items: center
+
+.basic-search-field > mat-form-field
+  flex: 1 1 auto
+  margin: 0 1rem
+
+mat-divider
+  margin: 1rem 0
+
+.expand-search-field
+  overflow: hidden
+
+.expand-search-field > *
+  margin: 1.5rem 0
+
+.sorting-field
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+.sorting-field > span, mat-radio-group
+  flex-grow: 1
+  flex-shrink: 0
+
+.sorting-field > span
+  width: 125px
+
+mat-radio-group
+  display: flex
+  align-items: center
+  justify-content: space-around
