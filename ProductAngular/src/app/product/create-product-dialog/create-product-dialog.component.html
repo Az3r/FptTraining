@@ -1,49 +1,47 @@
 <div mat-dialog-title>
   <h1>{{"create product" | titlecase}}</h1>
 </div>
-<mat-dialog-content>
-  <form>
-    <mat-form-field>
-      <mat-label>
-        {{"name" | titlecase}}
-      </mat-label>
-      <input matInput>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>
-        {{"category" | titlecase}}
-      </mat-label>
-      <mat-select>
-        <mat-option>Hello</mat-option>
-        <mat-option>World</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>
-        {{"supplier" | titlecase}}
-      </mat-label>
-      <mat-select>
-        <mat-option>Hello</mat-option>
-        <mat-option>World</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>
-        {{"price" | titlecase}}
-      </mat-label>
-      <input matInput type="number">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>
-        {{"release date" | titlecase}}
-      </mat-label>
-      <input matInput [matDatepicker]="release_date_picker">
-      <mat-datepicker-toggle matSuffix [for]="release_date_picker"></mat-datepicker-toggle>
-      <mat-datepicker #release_date_picker></mat-datepicker>
-    </mat-form-field>
-  </form>
+<form>
+  <mat-form-field>
+    <mat-label>
+      {{"name" | titlecase}}
+    </mat-label>
+    <input matInput>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>
+      {{"category" | titlecase}}
+    </mat-label>
+    <mat-select>
+      <mat-option>Hello</mat-option>
+      <mat-option>World</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>
+      {{"supplier" | titlecase}}
+    </mat-label>
+    <mat-select>
+      <mat-option>Hello</mat-option>
+      <mat-option>World</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>
+      {{"price" | titlecase}}
+    </mat-label>
+    <input matInput type="number">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>
+      {{"release date" | titlecase}}
+    </mat-label>
+    <input matInput [matDatepicker]="release_date_picker">
+    <mat-datepicker-toggle matSuffix [for]="release_date_picker"></mat-datepicker-toggle>
+    <mat-datepicker #release_date_picker></mat-datepicker>
+  </mat-form-field>
   <mat-checkbox>Go to product&apos;s page after created</mat-checkbox>
-</mat-dialog-content>
+</form>
 <mat-dialog-actions>
   <button mat-raised-button type="submit" color='primary'>{{"submit" | uppercase}}</button>
   <button mat-dialog-close mat-button (click)="close()">{{"close" | uppercase}}</button>
