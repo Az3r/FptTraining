@@ -47,6 +47,8 @@ export class LoginComponent implements OnInit {
   }
 
   async onSubmit() {
+    if (this.loginForm!.invalid) return
+
     this.submitting = true;
     const form = this.loginForm!.value;
 

@@ -23,6 +23,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientModule } from '@angular/common/http';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InterceptorService } from './services/interceptor.service';
 
 
 @NgModule({
@@ -72,6 +75,11 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatSnackBarModule
-  ]
+  ],
+  providers: [
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
+  ],
+
 })
 export class SharedModule { }

@@ -14,8 +14,8 @@
     </mat-label>
     <textarea required rows="3" matInput formControlName="description"></textarea>
   </mat-form-field>
-  <div formArrayName="categories">
-    <h3>{{"select one or more categories" | titlecase }}</h3>
+  <div formArrayName="categories" class="form-category">
+    <h3 style="margin-bottom: 0;">Select one or more categories</h3>
     <mat-checkbox *ngFor="let category of categories; index as i" [formControlName]="i">
       {{category.name | titlecase}}
     </mat-checkbox>

@@ -10,7 +10,7 @@ import { IAuthToken } from 'src/app/shared/models/auth';
 })
 export class AuthService {
 
-  readonly url = `${environment.apiUrl}/auth`
+  readonly authUrl = `${environment.apiUrl}/auth`
 
   observer: Subject<IAuthToken> = new Subject<IAuthToken>()
 
@@ -28,23 +28,44 @@ export class AuthService {
     return undefined;
   }
 
+  token() {
+    const accessToken = localStorage.getItem("access_token")
+    const refreshToken = localStorage.getItem("refresh_token")
+
+    if (refreshToken) return { accessToken, refreshToken }
+    return undefined;
+  }
+
   async login(displayName: string, password: string): Promise<IAuthToken> {
-    return this.http.post<IAuthToken>(`${this.url}/login`, { displayName, password })
+    return this.http.post<IAuthToken>(`${this.authUrl}/login`, { displayName, password })
       .pipe(
         catchError(error => this.onError<IAuthToken>("login", error)),
-        tap(token => {
-          localStorage.setItem("access_token", token.accessToken!)
-          localStorage.setItem("refresh_token", token.refreshToken!)
-          this.observer.next(token)
-        })
+        tap(value => this.store(value))
       )
       .toPromise()
+  }
+
+  store(token: IAuthToken) {
+    localStorage.setItem("access_token", token.accessToken!)
+    localStorage.setItem("refresh_token", token.refreshToken!)
+    this.observer.next(token)
   }
 
   logout() {
     this.observer.next(undefined)
     localStorage.removeItem("access_token")
     localStorage.removeItem("refresh_token")
+  }
+
+  refresh() {
+    const refreshToken = localStorage.getItem("refresh_token");
+    if (!this.refresh) throw new Error("refresh_token_not_found");
+
+    return this.http.post<IAuthToken>(`${this.authUrl}/refresh`, { refreshToken })
+      .pipe(
+        catchError(error => this.onError<IAuthToken>("refresh", error)),
+        tap(value => this.store(value))
+      )
   }
 
   onError<T>(operation: string, error: HttpErrorResponse, fallback?: T): Observable<T> {
