@@ -11,6 +11,7 @@ namespace ProductServer.Controllers
 {
   [Route("api/product")]
   [ApiController]
+  [Authorize]
   public class ProductController : ControllerBase
   {
     public ProductController(IUnitOfWork worker, IDtoService mapper, IRequestService transform)
@@ -61,15 +62,15 @@ namespace ProductServer.Controllers
     {
       var product = requestService.ToProduct(id, body);
       database.ProductRepository.Update(product);
-      var dto = dtoService.ToProductDetail(product);
-      return Ok(dto);
+      database.Save();
+      return NoContent();
     }
 
     [HttpDelete("{id}")]
     public IActionResult DeleteProduct(Guid id)
     {
       database.ProductRepository.Delete(id);
-      return Ok();
+      return NoContent();
     }
 
     private readonly IUnitOfWork database;

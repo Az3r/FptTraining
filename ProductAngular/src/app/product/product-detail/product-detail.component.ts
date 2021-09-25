@@ -30,23 +30,19 @@ export class ProductDetailComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id')
     if (!this.id) return;
 
-    this.productService.getProduct(this.id).subscribe(item => {
-      if (item) {
-        this.product = item
-        console.log(this.product)
-      }
+    this.productService.getProduct(this.id).then(item => {
+      this.product = item
+      console.log(this.product)
     })
 
     // preload categories and suppliers for editing product
-    this.productService.getCategories()
-      .subscribe(item => {
-        if (item) this.categories = item;
-      })
+    this.productService.getCategories().then(item => {
+      this.categories = item;
+    })
 
-    this.productService.getSuppliers()
-      .subscribe(item => {
-        if (item) this.suppliers = item;
-      })
+    this.productService.getSuppliers().then(item => {
+      if (item) this.suppliers = item;
+    })
   }
 
   toCategoryNames() {
