@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { ICategory, IProductDetail, IProductMaster, ISupplier } from '../shared/product';
+import { ICategory, IProductDetail, IProductMaster, ISupplier } from 'src/app/shared/models/product';
 import { stringify } from 'qs'
 import { catchError } from 'rxjs/operators'
 import { Observable, of, throwError } from 'rxjs';
@@ -66,7 +66,7 @@ export class ProductService {
       .toPromise();
   }
 
-  onError<T>(operation: string, error: any, fallback?: T): Observable<T> {
+  onError<T>(operation: string, error: HttpErrorResponse, fallback?: T): Observable<T> {
     console.error(operation, error)
     if (fallback == undefined) return throwError(error)
     else return of(fallback);

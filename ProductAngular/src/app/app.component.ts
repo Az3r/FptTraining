@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AuthService } from './auth/auth.service';
-import { IAuthToken } from './shared/auth';
+import { AuthService } from './shared/services/auth.service';
+import { IAuthToken } from './shared/models/auth';
 
 @Component({
   selector: 'app-root',

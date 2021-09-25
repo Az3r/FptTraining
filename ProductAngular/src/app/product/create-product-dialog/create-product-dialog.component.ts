@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ICategory, ISupplier } from 'src/app/shared/product';
-import { ProductService } from '../product.service';
+import { ICategory, ISupplier } from 'src/app/shared/models/product';
+import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
   selector: 'app-create-product-dialog',

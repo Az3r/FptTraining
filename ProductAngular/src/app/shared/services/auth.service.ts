@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, of, Subject, Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { IAuthToken } from '../shared/auth';
+import { IAuthToken } from 'src/app/shared/models/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +47,7 @@ export class AuthService {
     localStorage.removeItem("refresh_token")
   }
 
-  onError<T>(operation: string, error: any, fallback?: T): Observable<T> {
+  onError<T>(operation: string, error: HttpErrorResponse, fallback?: T): Observable<T> {
     console.error(operation, error)
     if (fallback == undefined) return throwError(error)
     return of(fallback);
