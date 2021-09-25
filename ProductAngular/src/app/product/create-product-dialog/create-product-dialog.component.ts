@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ICategory, ISupplier } from 'src/app/shared/product';
+import { ProductService } from '../product.service';
 
 @Component({
   selector: 'app-create-product-dialog',
@@ -10,23 +11,26 @@ import { ICategory, ISupplier } from 'src/app/shared/product';
 })
 export class CreateProductDialog implements OnInit {
 
-  productForm: FormGroup
+  productForm?: FormGroup
 
-  categories: ICategory[]
-  suppliers: ISupplier[]
+  categories: ICategory[] = []
+  suppliers: ISupplier[] = []
 
-  submitting: boolean
+  submitting: boolean = false
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<CreateProductDialog>
+    private dialogRef: MatDialogRef<CreateProductDialog>,
+    private productService: ProductService,
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.categories = await this.productService.getCategories();
+    this.suppliers = await this.productService.getSuppliers();
     this.productForm = this.fb.group({
       name: [''],
       description: ['A short description about this product'],
-      categories: this.fb.array([]),
+      categories: this.fb.array(this.suppliers.map(item => this.fb.control(item.id))),
       supplier: [''],
       price: [''],
       releasedDate: ['']
@@ -38,7 +42,7 @@ export class CreateProductDialog implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.productForm.value)
+    console.log(this.productForm!.value)
   }
 
 }

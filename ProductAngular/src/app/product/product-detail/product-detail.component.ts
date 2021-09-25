@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ICategory, IProductDetail, ISupplier } from 'src/app/shared/product';
 import { ProductService } from '../product.service';
@@ -11,14 +11,14 @@ import { ProductService } from '../product.service';
 })
 export class ProductDetailComponent implements OnInit {
 
-  id: string | null
+  id?: string | null
   editting: boolean = false
-  product: IProductDetail
+  product?: IProductDetail
 
-  productForm: FormGroup
+  productForm?: FormGroup
 
-  categories: ICategory[]
-  suppliers: ISupplier[]
+  categories: ICategory[] = []
+  suppliers: ISupplier[] = []
 
   constructor(
     private formBuilder: FormBuilder,
@@ -46,31 +46,28 @@ export class ProductDetailComponent implements OnInit {
   }
 
   toCategoryNames() {
-    return this.product.categories.map(item => item.name).join(', ')
+    return this.product!.categories.map(item => item.name).join(', ')
   }
 
   editProduct(value: boolean) {
     this.editting = value;
     if (this.editting) {
-      const selectedCategories = this.categories.map(category => this.product.categories.findIndex(value => value.id === category.id) >= 0)
+      const selectedCategories = this.categories.map(category => this.product!.categories.findIndex(value => value.id === category.id) >= 0)
       this.productForm = this.formBuilder.group({
-        name: [this.product.name],
-        description: [this.product.description],
+        name: [this.product!.name],
+        description: [this.product!.description],
         categories: this.formBuilder.array(selectedCategories.map(item => this.formBuilder.control(item))),
-        supplier: [this.product.supplier.id],
-        price: [this.product.price],
-        releasedDate: [this.product.releasedDate],
-        discontinuedDate: [this.product.discontinuedDate],
-        detail: [this.product.detail]
+        supplier: [this.product!.supplier.id],
+        price: [this.product!.price],
+        releasedDate: [this.product!.releasedDate],
+        discontinuedDate: [this.product!.discontinuedDate],
+        detail: [this.product!.detail]
       })
     }
   }
 
-  categoryChanged(added: boolean, item: ICategory) {
-    if (!added) {
-    } else {
-    }
-
+  onSubmit() {
+    console.log(this.productForm!.value)
   }
 
 }

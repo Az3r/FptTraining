@@ -12,7 +12,7 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'ProductAngular';
 
   user?: IAuthToken
-  subscription: Subscription;
+  subscription?: Subscription;
 
   constructor(
     private authService: AuthService

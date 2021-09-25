@@ -1,4 +1,4 @@
-<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+<form *ngIf="productForm" [formGroup]="productForm" (ngSubmit)="onSubmit()">
   <div mat-dialog-title>
     <h1>{{"create product" | titlecase}}</h1>
   </div>
@@ -16,8 +16,9 @@
   </mat-form-field>
   <div formArrayName="categories">
     <h3>{{"select one or more categories" | titlecase }}</h3>
-    <mat-checkbox *ngFor="let category of categories; index as i" [formControlName]="i">{{category.name |
-      titlecase}}</mat-checkbox>
+    <mat-checkbox *ngFor="let category of categories; index as i" [formControlName]="i">
+      {{category.name | titlecase}}
+    </mat-checkbox>
   </div>
   <mat-form-field>
     <mat-label>

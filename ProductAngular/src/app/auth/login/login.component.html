@@ -1,7 +1,7 @@
 <div class="root">
   <mat-card>
     <h1 class="title">{{"product demo" | titlecase}}</h1>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form *ngIf="loginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <mat-form-field>
         <mat-label>{{"your name" | titlecase}}</mat-label>
         <input [disabled]="submitting" matInput formControlName="name" required>

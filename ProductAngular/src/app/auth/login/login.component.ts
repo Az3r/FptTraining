@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -11,8 +11,8 @@ import { AuthService } from '../auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  loginForm: FormGroup
-  submitting: boolean
+  loginForm?: FormGroup
+  submitting: boolean = false
 
   constructor(
     private snackbar: MatSnackBar,
@@ -29,11 +29,11 @@ export class LoginComponent implements OnInit {
   }
 
   get name() {
-    return this.loginForm.get('name') as FormControl
+    return this.loginForm!.get('name') as FormControl
   }
 
   get password() {
-    return this.loginForm.get('password') as FormControl
+    return this.loginForm!.get('password') as FormControl
   }
 
   getNameError() {
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
 
   async onSubmit() {
     this.submitting = true;
-    const form = this.loginForm.value;
+    const form = this.loginForm!.value;
 
     try {
       await this.authService.login(form.name, form.password);
@@ -65,6 +65,5 @@ export class LoginComponent implements OnInit {
     } finally {
       this.submitting = false;
     }
-
   }
 }

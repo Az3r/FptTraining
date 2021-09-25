@@ -3,7 +3,7 @@
     <button mat-icon-button matTooltip="Cancel editting" (click)="editProduct(false)">
       <mat-icon>close</mat-icon>
     </button>
-    <form [formGroup]="productForm">
+    <form *ngIf="productForm" [formGroup]="productForm" (ngSubmit)="onSubmit()">
       <mat-form-field>
         <mat-label>
           {{"name" | titlecase}}
