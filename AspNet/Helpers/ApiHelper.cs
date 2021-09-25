@@ -14,12 +14,9 @@ namespace ProductServer.Helpers
     {
       return new
       {
-        Error = new
-        {
-          Code = code,
-          Message = message,
-          Details = details
-        }
+        Code = code,
+        Message = message,
+        Details = details
       };
     }
   }

@@ -36,7 +36,7 @@ namespace ProductServer
       worker.UserRepository.Create(user);
       worker.Save();
 
-      return Ok(ApiHelper.Success(user));
+      return Ok(user);
     }
 
     [AllowAnonymous]
@@ -65,7 +65,7 @@ namespace ProductServer
       });
       worker.Save();
 
-      return Ok(ApiHelper.Success(tokens));
+      return Ok(tokens);
     }
 
     [HttpPost("refresh")]
@@ -104,7 +104,7 @@ namespace ProductServer
       });
       worker.Save();
 
-      return Ok(ApiHelper.Success(tokens));
+      return Ok(tokens);
     }
 
     private IAuthService auth;
