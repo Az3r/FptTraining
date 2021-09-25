@@ -12,7 +12,7 @@ namespace ProductServer
 {
   [ApiController]
   [Route("api/auth")]
-  [Authorize]
+  [AllowAnonymous]
   public class AuthController : ControllerBase
   {
     public AuthController(IAuthService auth, IUnitOfWork worker)
@@ -21,7 +21,7 @@ namespace ProductServer
       this.worker = worker;
     }
 
-    [AllowAnonymous]
+
     [HttpPost("register")]
     public IActionResult Register(LoginRequest body)
     {
@@ -39,7 +39,7 @@ namespace ProductServer
       return Ok(user);
     }
 
-    [AllowAnonymous]
+
     [HttpPost("login")]
     public IActionResult Login(LoginRequest body)
     {
@@ -69,10 +69,11 @@ namespace ProductServer
     }
 
     [HttpPost("refresh")]
-    public IActionResult RefreshToken([FromQuery(Name = "token")] string value)
+
+    public IActionResult RefreshToken(RefreshRequest body)
     {
       // verify provided value
-      Auth found = worker.AuthRepository.Find(value);
+      Auth found = worker.AuthRepository.Find(body.RefreshToken);
       if (found is null)
         return NotFound(ApiHelper.Failure(
           "refresh_token_not_found",
@@ -82,6 +83,15 @@ namespace ProductServer
       if (found.ActivatedAt is not null) return BadRequest(ApiHelper.Failure(
         "refresh_token_activated",
         "provided refresh token has been activated",
+        new
+        {
+          ActivatedAt = found.ActivatedAt
+        }
+      ));
+
+      if (DateTime.UtcNow > found.ExpirationTime) return BadRequest(ApiHelper.Failure(
+        "refresh_token_expired",
+        "provided refresh token has been expired",
         new
         {
           ActivatedAt = found.ActivatedAt

@@ -32,4 +32,10 @@ namespace ProductServer.ApiModels
     [Required]
     public string RefreshToken { get; set; }
   }
+
+  public class RefreshRequest
+  {
+    [Required]
+    public string RefreshToken { get; set; }
+  }
 }
