@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ProductServer.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Security.Cryptography;
 
 namespace ProductServer.Services
 {
@@ -14,7 +15,8 @@ namespace ProductServer.Services
     string CreateJwtToken(User user);
     string GenerateRandomToken();
 
-    string HashPassword(string password, string name);
+    byte[] HashPassword(string password, out byte[] salt);
+    bool VerifyPassword(string password, byte[] expected, byte[] salt);
   }
 
   public class AuthService : IAuthService
@@ -24,17 +26,28 @@ namespace ProductServer.Services
       secret = configuration["JwtConfig:Secret"];
       audience = configuration["JwtConfig:Audience"];
       issuer = configuration["JwtConfig:Issuer"];
+
     }
 
-    public string HashPassword(string password, string name)
+    public byte[] HashPassword(string password, out byte[] salt)
     {
-      byte[] salt = Encoding.ASCII.GetBytes(name);
-      byte[] pwd = Encoding.ASCII.GetBytes(password);
-      using (var key = new Rfc2898DeriveBytes(password, salt))
+      salt = new byte[32];
+      using (var generator = new RNGCryptoServiceProvider())
       {
-        byte[] hashed = key.GetBytes(64);
-        return Convert.ToBase64String(hashed);
+        generator.GetNonZeroBytes(salt);
       }
+
+      byte[] hashed = KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA512, 1000, 64);
+
+      return hashed;
+    }
+
+    public bool VerifyPassword(string password, byte[] expected, byte[] salt)
+    {
+      byte[] actual = KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA512, 10000, 64);
+
+      bool matched = CryptographicOperations.FixedTimeEquals(actual, expected);
+      return matched;
     }
 
     public string CreateJwtToken(User user)

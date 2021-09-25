@@ -14,8 +14,10 @@ namespace ProductServer.Models
     {
       base.OnModelCreating(builder);
 
-      // Seed(builder);
+      builder.Entity<User>().Property(u => u.HashedPassword).IsFixedLength(true);
+      builder.Entity<User>().Property(u => u.Salt).IsFixedLength(true);
 
+      // Seed(builder);
     }
 
     private void Seed(ModelBuilder builder)
@@ -45,12 +47,6 @@ namespace ProductServer.Models
       };
 
       int uuidCounter = 0;
-      User[] users = new User[]
-      {
-        new User { ID = new Guid(uuids[uuidCounter++]), DisplayName = "Tuan Nguyen", HashedPassword = "$2a$13$xk2HTLFXnufoUgKKDrNeL.pT.6o.3tBcpQcfztHuIQ4Umyokg6.7a" }
-      };
-      builder.Entity<User>().HasData(users);
-
       Supplier[] suppliers = new Supplier[] {
         new Supplier { ID = new Guid(uuids[uuidCounter++]), Name = "Alpha", Address = "Ho Chi Minh City" },
         new Supplier { ID = new Guid(uuids[uuidCounter++]), Name = "Beta", Address = "Ha Noi City" },

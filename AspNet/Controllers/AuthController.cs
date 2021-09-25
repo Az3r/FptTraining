@@ -25,13 +25,13 @@ namespace ProductServer
     [HttpPost("login")]
     public IActionResult Login(LoginRequest body)
     {
-      string hashedPassword = auth.HashPassword(body.Password, body.DisplayName);
-      User user = worker.UserRepository.Verify(body.DisplayName, hashedPassword);
-
+      User user = worker.UserRepository.Find(body.DisplayName);
       if (user is null)
       {
         return NotFound(ApiHelper.Failure("user_not_found", "unable to find user with provided arguments"));
       }
+
+      bool authorized = auth.VerifyPassword(body.Password, user.HashedPassword, user.Salt);
 
       AuthTokenDto tokens = new AuthTokenDto
       {

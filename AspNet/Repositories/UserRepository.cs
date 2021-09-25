@@ -10,9 +10,9 @@ namespace ProductServer.Repositories
   {
     public UserRepository(ProductContext context) : base(context) { }
 
-    public User Verify(string name, string hashedPassword)
+    public User Find(string name)
     {
-      User user = Entities.SingleOrDefault(u => u.DisplayName.Equals(name) && u.HashedPassword.Equals(hashedPassword, StringComparison.Ordinal));
+      User user = Entities.SingleOrDefault(u => u.DisplayName.Equals(name));
       return user;
     }
   }

@@ -8,7 +8,7 @@ namespace ProductServer.Models
   {
     Guid ID { get; set; }
     string DisplayName { get; set; }
-    string HashedPassword { get; set; }
+    byte[] HashedPassword { get; set; }
     IEnumerable<Auth> Auths { get; set; }
   }
 
@@ -22,8 +22,12 @@ namespace ProductServer.Models
     public string DisplayName { get; set; }
 
     [Required]
-    [StringLength(60)]
-    public string HashedPassword { get; set; }
+    [MaxLength(64)]
+    public byte[] HashedPassword { get; set; }
+
+    [Required]
+    [MaxLength(32)]
+    public byte[] Salt { get; set; }
 
     public IEnumerable<Auth> Auths { get; set; }
   }
