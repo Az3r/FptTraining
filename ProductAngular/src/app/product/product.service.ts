@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { ICategory, IProductDetail, IProductMaster, ISupplier } from '../shared/product';
 import { stringify } from 'qs'
 import { catchError } from 'rxjs/operators'
-import { of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,53 +15,61 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  findProducts(query: FindProductQuery) {
+  async findProducts(query: FindProductQuery): Promise<IProductMaster[]> {
     const querify = stringify({
       ...query,
       order: query?.order && Object.entries(query.order)
-        .map(([key, value]) => `${key}(${value})`)
+        .map(([key, value]) => `${key}:${value}`)
         .join(',')
     }, { skipNulls: true })
 
-    return this.http.get<IProductMaster>(`${this.url}?${querify}`)
-      .pipe(catchError((err) => this.onError("findProducts", err)));
+    return this.http.get<IProductMaster[]>(`${this.url}?${querify}`)
+      .pipe(
+        catchError(err => this.onError<IProductMaster[]>("findProducts", err))
+      )
+      .toPromise();
   }
 
-  getProduct(id: string) {
+  async getProduct(id: string): Promise<IProductDetail> {
     return this.http.get<IProductDetail>(`${this.url}/${id}`)
-      .pipe<IProductDetail | undefined>(
+      .pipe(
         catchError((err) => this.onError<IProductDetail>("getProduct", err))
-      );
+      )
+      .toPromise();
   }
 
-  updateProduct(id: string, data: Omit<IProductDetail, "id">) {
-    return this.http.put<IProductDetail>(`${this.url}/update/${id}`, data)
-      .pipe(catchError((err) => this.onError("updateProduct", err)));
+  async updateProduct(id: string, data: Omit<IProductDetail, "id">): Promise<void> {
+    return this.http.put<void>(`${this.url}/update/${id}`, data)
+      .pipe(catchError((err) => this.onError<void>("updateProduct", err)))
+      .toPromise();
   }
 
-  deleteProduct(id: string) {
-    return this.http.delete(`${this.url}/delete/${id}`)
-      .pipe(catchError((err) => this.onError("deleteProduct", err)));
+  deleteProduct(id: string): Promise<void> {
+    return this.http.delete<void>(`${this.url}/delete/${id}`)
+      .pipe(catchError((err) => this.onError<void>("deleteProduct", err)))
+      .toPromise();
   }
 
-  getCategories() {
+  async getCategories(): Promise<ICategory[]> {
     return this.http.get<ICategory[]>(`${environment.apiUrl}/category/all`)
-      .pipe<ICategory[] | undefined>(
+      .pipe(
         catchError((err) => this.onError<ICategory[]>("getCategories", err))
-      );
+      )
+      .toPromise();
   }
 
-  getSuppliers() {
+  async getSuppliers() {
     return this.http.get<ISupplier[]>(`${environment.apiUrl}/supplier/all`)
-      .pipe<ISupplier[] | undefined>(
+      .pipe(
         catchError((err) => this.onError<ISupplier[]>("getCategories", err))
-      );
+      )
+      .toPromise();
   }
 
-  onError<T>(operation: string, error: any, fallback?: T) {
+  onError<T>(operation: string, error: any, fallback?: T): Observable<T> {
     console.error(operation, error)
-    if (fallback == undefined) throwError(error)
-    return of(fallback);
+    if (fallback == undefined) return throwError(error)
+    else return of(fallback);
   }
 }
 

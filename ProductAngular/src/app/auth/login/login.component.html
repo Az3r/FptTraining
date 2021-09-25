@@ -1,16 +1,22 @@
 <div class="root">
   <mat-card>
     <h1 class="title">{{"product demo" | titlecase}}</h1>
-    <form>
-      <mat-form-field class="field">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
         <mat-label>{{"your name" | titlecase}}</mat-label>
-        <input matInput>
+        <input [disabled]="submitting" matInput formControlName="name" required>
+        <mat-error *ngIf="name.invalid">{{getNameError()}}</mat-error>
       </mat-form-field>
-      <mat-form-field class="field">
+      <mat-form-field>
         <mat-label>{{"your password" | titlecase}}</mat-label>
-        <input matInput>
+        <input [disabled]="submitting" matInput type='password' formControlName="password" required>
+        <mat-error *ngIf="password.invalid">{{getPasswordError()}}</mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary" type="submit">{{"login" | uppercase}}</button>
+      <button *ngIf="!submitting" mat-raised-button color="primary" type="submit">{{"login" | uppercase}}</button>
+      <div *ngIf="submitting" class="spinner-container">
+        <mat-spinner style="display: block;" diameter="32"></mat-spinner>
+        <h3 style="margin: 0 0 0 1rem;">Signing you in</h3>
+      </div>
     </form>
   </mat-card>
 </div>

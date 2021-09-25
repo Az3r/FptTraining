@@ -1,48 +1,49 @@
-<div mat-dialog-title>
-  <h1>{{"create product" | titlecase}}</h1>
-</div>
-<form>
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-title>
+    <h1>{{"create product" | titlecase}}</h1>
+  </div>
   <mat-form-field>
     <mat-label>
       {{"name" | titlecase}}
     </mat-label>
-    <input matInput>
+    <input required matInput formControlName="name">
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field appearance="fill">
     <mat-label>
-      {{"category" | titlecase}}
+      {{"description" | titlecase}}
     </mat-label>
-    <mat-select>
-      <mat-option>Hello</mat-option>
-      <mat-option>World</mat-option>
-    </mat-select>
+    <textarea required rows="3" matInput formControlName="description"></textarea>
   </mat-form-field>
+  <div formArrayName="categories">
+    <h3>{{"select one or more categories" | titlecase }}</h3>
+    <mat-checkbox *ngFor="let category of categories; index as i" [formControlName]="i">{{category.name |
+      titlecase}}</mat-checkbox>
+  </div>
   <mat-form-field>
     <mat-label>
       {{"supplier" | titlecase}}
     </mat-label>
-    <mat-select>
-      <mat-option>Hello</mat-option>
-      <mat-option>World</mat-option>
+    <mat-select required>
+      <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.name}}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field>
     <mat-label>
       {{"price" | titlecase}}
     </mat-label>
-    <input matInput type="number">
+    <input required matInput type="number" formControlName="price">
   </mat-form-field>
   <mat-form-field>
     <mat-label>
-      {{"release date" | titlecase}}
+      {{"released date" | titlecase}}
     </mat-label>
-    <input matInput [matDatepicker]="release_date_picker">
+    <input required matInput type='date' [matDatepicker]="release_date_picker" formControlName="releasedDate">
     <mat-datepicker-toggle matSuffix [for]="release_date_picker"></mat-datepicker-toggle>
     <mat-datepicker #release_date_picker></mat-datepicker>
   </mat-form-field>
   <mat-checkbox>Go to product&apos;s page after created</mat-checkbox>
+  <mat-dialog-actions>
+    <button mat-raised-button type="submit" color='primary'>{{"submit" | uppercase}}</button>
+    <button mat-dialog-close mat-button (click)="close()">{{"close" | uppercase}}</button>
+  </mat-dialog-actions>
 </form>
-<mat-dialog-actions>
-  <button mat-raised-button type="submit" color='primary'>{{"submit" | uppercase}}</button>
-  <button mat-dialog-close mat-button (click)="close()">{{"close" | uppercase}}</button>
-</mat-dialog-actions>

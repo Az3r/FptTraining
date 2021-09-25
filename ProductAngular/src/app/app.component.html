@@ -3,7 +3,7 @@
     {{"cep" | titlecase}} {{"training" | titlecase}}
   </span>
   <div class="expand"></div>
-  <button mat-button>{{"login" | titlecase}}</button>
-  <button mat-button>{{"logout" | titlecase}}</button>
+  <a *ngIf="user == undefined" href="/login" mat-button>{{"login" | titlecase}}</a>
+  <button *ngIf="user != undefined" mat-button (click)="logout()">{{"logout" | titlecase}}</button>
 </mat-toolbar>
 <router-outlet></router-outlet>
