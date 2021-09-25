@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace ProductServer.Models
 {
@@ -26,14 +26,14 @@ namespace ProductServer.Models
       using (StreamReader reader = new StreamReader("Mocks/products.json"))
       {
         string json = reader.ReadToEnd();
-        mocks = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(json);
+        mocks = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(json);
       }
 
       List<string> uuids = null;
       using (StreamReader reader = new StreamReader("Mocks/uuids.json"))
       {
         string json = reader.ReadToEnd();
-        uuids = JsonConvert.DeserializeObject<List<string>>(json);
+        uuids = JsonSerializer.Deserialize<List<string>>(json);
       }
 
       // map each category in products.json to its corresponding index in Categories list

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ProductServer.Models
 {
@@ -29,6 +30,7 @@ namespace ProductServer.Models
     [MaxLength(32)]
     public byte[] Salt { get; set; }
 
+    [JsonIgnore]
     public IEnumerable<Auth> Auths { get; set; }
   }
 }
