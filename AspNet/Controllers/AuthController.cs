@@ -22,6 +22,24 @@ namespace ProductServer
     }
 
     [AllowAnonymous]
+    [HttpPost("register")]
+    public IActionResult Register(LoginRequest body)
+    {
+      byte[] hashed = auth.HashPassword(body.Password, out byte[] salt);
+
+      User user = new User
+      {
+        HashedPassword = hashed,
+        Salt = salt,
+        DisplayName = body.DisplayName
+      };
+      worker.UserRepository.Create(user);
+      worker.Save();
+
+      return Ok(ApiHelper.Success(user));
+    }
+
+    [AllowAnonymous]
     [HttpPost("login")]
     public IActionResult Login(LoginRequest body)
     {
