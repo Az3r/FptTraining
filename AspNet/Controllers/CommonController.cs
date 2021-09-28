@@ -10,7 +10,6 @@ namespace ProductServer.Controllers
 {
   [ApiController]
   [Route("api")]
-  [Authorize]
   public class CommonCOntroller : ControllerBase
   {
 
