@@ -15,17 +15,16 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  async findProducts(query: FindProductQuery): Promise<IProductMaster[]> {
+  async findProducts(query: FindProductQuery): Promise<PaginationResponse<IProductMaster>> {
     const querify = stringify({
       ...query,
-      order: query?.order && Object.entries(query.order)
+      sort: query?.sort && Object.entries(query.sort)
         .map(([key, value]) => `${key}:${value}`)
-        .join(',')
-    }, { skipNulls: true })
+    }, { skipNulls: true, arrayFormat: 'comma' })
 
-    return this.http.get<IProductMaster[]>(`${this.url}?${querify}`)
+    return this.http.get<PaginationResponse<IProductMaster>>(`${this.url}?${querify}`)
       .pipe(
-        catchError(err => this.onError<IProductMaster[]>("findProducts", err))
+        catchError(err => this.onError<PaginationResponse<IProductMaster>>("findProducts", err))
       )
       .toPromise();
   }
@@ -75,12 +74,19 @@ export class ProductService {
 
 export interface FindProductQuery {
   name?: string,
-  category?: string,
+  categories?: string[],
   minPrice?: number,
   maxPrice?: number
   size?: number,
   offset?: number,
-  order?: {
+  sort?: {
     [field: string]: 'asc' | 'desc'
   }
+}
+
+export interface PaginationResponse<T> {
+  items: T[],
+  totalPages: number,
+  pageSize: number,
+  pageOffset: number
 }
