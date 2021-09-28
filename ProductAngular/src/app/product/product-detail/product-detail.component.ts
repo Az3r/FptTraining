@@ -56,7 +56,7 @@ export class ProductDetailComponent implements OnInit {
       this.productForm = this.formBuilder.group({
         name: [this.product!.name],
         description: [this.product!.description],
-        categories: this.formBuilder.array(selectedCategories.map(item => this.formBuilder.control(item))),
+        categories: this.formBuilder.array(selectedCategories),
         supplier: [this.product!.supplier.id],
         price: [this.product!.price],
         releasedDate: [this.product!.releasedDate],

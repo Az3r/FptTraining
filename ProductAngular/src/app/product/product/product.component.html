@@ -1,76 +1,80 @@
 <div class="root">
-  <div class="search-field">
-    <div class="basic-search-field">
-      <button mat-icon-button matTooltip="Advance search" aria-label="open advance search"
-        (click)="toggleAdvanceSearch(!advanceSearch)">
-        <mat-icon>filter_alt</mat-icon>
-      </button>
-      <mat-form-field floatLabel="never">
-        <mat-placeholder>Find your products by name...</mat-placeholder>
-        <input matInput>
-      </mat-form-field>
-      <button mat-raised-button>
-        {{"search" | uppercase}}
-      </button>
-    </div>
-    <div [@advance-search-field]="advanceSearch? 'expanded' : 'collapsed'" class="expand-search-field">
-      <mat-divider></mat-divider>
-      <div class="category-filter">
-        <h2>Category</h2>
-        <mat-checkbox>{{"title"}}</mat-checkbox>
-      </div>
-      <div class="price-filter">
-        <h2>Price</h2>
+  <form *ngIf="searchForm" [formGroup]="searchForm" (ngSubmit)="onSearch()">
+    <div class="search-field">
+      <div class="basic-search-field">
+        <button mat-icon-button matTooltip="Advance search" aria-label="open advance search" type="button"
+          (click)="toggleAdvanceSearch(!advanceSearch)">
+          <mat-icon>filter_alt</mat-icon>
+        </button>
         <mat-form-field floatLabel="never">
-          <mat-placeholder>{{"min price" | titlecase}}</mat-placeholder>
-          <input matInput type='number'>
+          <mat-placeholder>Find your products by name...</mat-placeholder>
+          <input matInput formControlName="name">
         </mat-form-field>
-        <div style="display: inline-block;width: 1rem"></div>
-        <mat-form-field floatLabel="never">
-          <mat-placeholder>{{"max price" | titlecase}}</mat-placeholder>
-          <input matInput type='number'>
-        </mat-form-field>
+        <button mat-raised-button type="submit">
+          {{"search" | uppercase}}
+        </button>
       </div>
-      <div class="sorting">
-        <h2>Sorting</h2>
-        <div class="sorting-field">
-          <span class="mat-h3">{{"name" | titlecase}}</span>
-          <mat-radio-group name="name" value="asc">
-            <mat-radio-button value="asc" [checked]="true">Ascending</mat-radio-button>
-            <mat-radio-button value="desc">Descending</mat-radio-button>
-          </mat-radio-group>
+      <div [@advance-search-field]="advanceSearch? 'expanded' : 'collapsed'" class="expand-search-field">
+        <mat-divider></mat-divider>
+        <div class="category-filter" formArrayName="categories">
+          <h2>Category</h2>
+          <mat-checkbox *ngFor="let category of categories; let i = index" [formControlName]="i">
+            {{category.name}}
+          </mat-checkbox>
         </div>
-        <div class="sorting-field">
-          <span class="mat-h3">{{"category" | titlecase}}</span>
-          <mat-radio-group name="category" value="asc">
-            <mat-radio-button value="asc" [checked]="true">Ascending</mat-radio-button>
-            <mat-radio-button value="desc">Descending</mat-radio-button>
-          </mat-radio-group>
+        <div class="price-filter">
+          <h2>Price</h2>
+          <mat-form-field floatLabel="never">
+            <mat-placeholder>{{"min price" | titlecase}}</mat-placeholder>
+            <input matInput type='number' formControlName="minPrice">
+          </mat-form-field>
+          <div style="display: inline-block;width: 1rem"></div>
+          <mat-form-field floatLabel="never">
+            <mat-placeholder>{{"max price" | titlecase}}</mat-placeholder>
+            <input matInput type='number' formControlName="maxPrice">
+          </mat-form-field>
         </div>
-        <div class="sorting-field">
-          <span class="mat-h3">{{"supplier" | titlecase}}</span>
-          <mat-radio-group name="supplier" value="asc">
-            <mat-radio-button value="asc" [checked]="true">Ascending</mat-radio-button>
-            <mat-radio-button value="desc">Descending</mat-radio-button>
-          </mat-radio-group>
-        </div>
-        <div class="sorting-field">
-          <span class="mat-h3">{{"price" | titlecase}}</span>
-          <mat-radio-group name="price" value="asc">
-            <mat-radio-button value="asc" [checked]="true">Ascending</mat-radio-button>
-            <mat-radio-button value="desc">Descending</mat-radio-button>
-          </mat-radio-group>
-        </div>
-        <div class="sorting-field">
-          <span class="mat-h3">{{"rating" | titlecase}}</span>
-          <mat-radio-group name="rating" value="asc">
-            <mat-radio-button value="asc" [checked]="true">Ascending</mat-radio-button>
-            <mat-radio-button value="desc">Descending</mat-radio-button>
-          </mat-radio-group>
+        <div class="sorting" formGroupName="sorting">
+          <h2>Sorting</h2>
+          <div class="sorting-field">
+            <span class="mat-h3">{{"name" | titlecase}}</span>
+            <mat-radio-group name="name" formControlName="name">
+              <mat-radio-button value="asc">Ascending</mat-radio-button>
+              <mat-radio-button value="desc">Descending</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="sorting-field">
+            <span class="mat-h3">{{"category" | titlecase}}</span>
+            <mat-radio-group name="category" formControlName="category">
+              <mat-radio-button value="asc">Ascending</mat-radio-button>
+              <mat-radio-button value="desc">Descending</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="sorting-field">
+            <span class="mat-h3">{{"supplier" | titlecase}}</span>
+            <mat-radio-group name="supplier" formControlName="supplier">
+              <mat-radio-button value="asc">Ascending</mat-radio-button>
+              <mat-radio-button value="desc">Descending</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="sorting-field">
+            <span class="mat-h3">{{"price" | titlecase}}</span>
+            <mat-radio-group name="price" formControlName="price">
+              <mat-radio-button value="asc">Ascending</mat-radio-button>
+              <mat-radio-button value="desc">Descending</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="sorting-field">
+            <span class="mat-h3">{{"rating" | titlecase}}</span>
+            <mat-radio-group name="rating" formControlName="rating">
+              <mat-radio-button value="asc">Ascending</mat-radio-button>
+              <mat-radio-button value="desc">Descending</mat-radio-button>
+            </mat-radio-group>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </form>
   <div class="content">
     <table mat-table [dataSource]="products" class="mat-elevation-z8">
       <ng-container matColumnDef="name">

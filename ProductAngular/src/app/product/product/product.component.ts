@@ -1,6 +1,9 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ICategory } from 'src/app/shared/models/product';
+import { ProductService } from 'src/app/shared/services/product.service';
 import { CreateProductDialog } from '../create-product-dialog/create-product-dialog.component';
 
 @Component({
@@ -109,6 +112,10 @@ export class ProductComponent implements OnInit {
     }
   ]
 
+  searchForm?: FormGroup
+
+  categories: ICategory[] = []
+
   columns: string[] = ["name", "supplier", "category", "price", "rating"]
 
   advanceSearch: boolean = false;
@@ -116,10 +123,28 @@ export class ProductComponent implements OnInit {
 
 
   constructor(
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private productService: ProductService,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
+    this.productService.getCategories().then(item => {
+      this.categories = item;
+      this.searchForm = this.fb.group({
+        name: [''],
+        categories: this.fb.array(this.categories.map(() => false)),
+        minPrice: [undefined],
+        maxPrice: [undefined],
+        sorting: this.fb.group({
+          name: this.fb.control('asc'),
+          category: this.fb.control('asc'),
+          supplier: this.fb.control('asc'),
+          price: this.fb.control('asc'),
+          rating: this.fb.control('asc'),
+        })
+      })
+    })
   }
 
   create() {
@@ -128,6 +153,10 @@ export class ProductComponent implements OnInit {
 
   toggleAdvanceSearch(value: boolean) {
     this.advanceSearch = value
+  }
+
+  onSearch() {
+    console.log(this.searchForm!.value)
   }
 
 }

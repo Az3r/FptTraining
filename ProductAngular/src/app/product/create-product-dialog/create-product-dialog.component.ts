@@ -30,7 +30,7 @@ export class CreateProductDialog implements OnInit {
     this.productForm = this.fb.group({
       name: [''],
       description: ['A short description about this product'],
-      categories: this.fb.array(this.suppliers.map(item => this.fb.control(item.id))),
+      categories: this.fb.array(this.suppliers.map(() => false)),
       supplier: [''],
       price: [''],
       releasedDate: ['']
