@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace ProductServer.Models
 {
-  public class Category : ICategory
+  public class Category : ICategory, IEquatable<ICategory>
   {
     [Key]
     public Guid ID { get; set; }
@@ -17,6 +17,11 @@ namespace ProductServer.Models
 
     [JsonIgnore]
     public List<Product> Products { get; set; }
+
+    public bool Equals(ICategory other)
+    {
+      return ID.Equals(other?.ID);
+    }
   }
 
   public interface ICategory

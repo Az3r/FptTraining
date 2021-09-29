@@ -53,4 +53,14 @@ namespace ProductServer.DTOs
     public double Price { get; set; }
     public List<string> Categories { get; set; }
   }
+
+  public class PaginationDto<T> where T : class
+  {
+    public IEnumerable<T> Items { get; set; }
+
+    public int TotalPages { get; set; }
+    public int PageSize { get; set; }
+    public int PageOffset { get; set; }
+  }
+
 }

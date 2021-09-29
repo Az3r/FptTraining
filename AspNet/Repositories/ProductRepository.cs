@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ProductServer.DTOs;
@@ -56,30 +57,34 @@ namespace ProductServer.Repositories
       return product;
     }
 
-    public IEnumerable<Product> Find(ProductFilter filter, ProductOrder sort, int size, int offset)
+    public IEnumerable<Product> Find(ProductFilter filter, ProductOrder order, int size, int offset, out int total)
     {
       Func<Product, bool> predicate = (product) =>
       {
-        var categories = product.Categories.Select(c => c.Name).Intersect(filter.Category).ToList();
-        return product.Name.Contains(filter.Name)
-               && categories.Count == filter.Category.Count
+        return (product.Name.Contains(filter.Name, StringComparison.OrdinalIgnoreCase)
+                || product.Categories.Contains(new Category { Name = filter.Name }, new ContainComparer())
+                || product.Supplier.Name.Contains(filter.Name, StringComparison.OrdinalIgnoreCase)
+              )
+               && filter.Categories.All(c => product.Categories.Contains(new Category { ID = c }))
                && product.Price >= filter.MinPrice
                && product.Price <= filter.MaxPrice;
       };
 
-      IEnumerable<Product> MakeOrder(IEnumerable<Product> query)
+      IEnumerable<Product> Sort(IEnumerable<Product> items)
       {
-        var result = query;
-        result = sort.Name == OrderBy.ASC ? result.OrderBy(p => p.Name) : result.OrderByDescending(p => p.Name);
-        result = sort.Rating == OrderBy.ASC ? result.OrderBy(p => p.Rating) : result.OrderByDescending(p => p.Rating);
-        result = sort.Price == OrderBy.ASC ? result.OrderBy(p => p.Price) : result.OrderByDescending(p => p.Price);
-        return result;
+        items = order.Rating == OrderBy.ASC ? items.OrderBy(p => p.Rating) : items.OrderByDescending(p => p.Rating);
+        items = order.Price == OrderBy.ASC ? items.OrderBy(p => p.Price) : items.OrderByDescending(p => p.Price);
+        items = order.Name == OrderBy.ASC ? items.OrderBy(p => p.Name) : items.OrderByDescending(p => p.Name);
+
+        return items;
       };
 
 
-      var query = Entities
+      var enumerable = Entities
       .Include(p => p.Supplier)
       .Include(p => p.Categories)
+      .AsNoTracking()
+      .Where(predicate)
       .Select(p => new Product
       {
         ID = p.ID,
@@ -88,19 +93,21 @@ namespace ProductServer.Repositories
         Rating = p.Rating,
         Supplier = new Supplier { Name = p.Supplier.Name },
         Categories = p.Categories.Select(c => new Category { Name = c.Name })
-      })
-      .AsNoTracking()
-      .Where(predicate).Skip(size * offset).Take(size);
+      });
 
-      var products = MakeOrder(query);
-      return products;
+      total = enumerable.Count();
+
+      var products = enumerable.Skip(size * offset).Take(size);
+      var sorted = Sort(products);
+
+      return sorted;
     }
-
   }
+
   public class ProductFilter
   {
     public string Name { get; set; }
-    public List<string> Category { get; set; }
+    public List<Guid> Categories { get; set; }
     public double MinPrice { get; set; }
     public double MaxPrice { get; set; }
   }
@@ -117,5 +124,19 @@ namespace ProductServer.Repositories
   {
     ASC,
     DESC
+  }
+  public class ContainComparer : IEqualityComparer<Category>
+  {
+
+    bool IEqualityComparer<Category>.Equals(Category x, Category y)
+    {
+      return x.Name.Contains(y.Name, StringComparison.OrdinalIgnoreCase);
+    }
+
+
+    int IEqualityComparer<Category>.GetHashCode(Category obj)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

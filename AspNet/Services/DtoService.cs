@@ -12,6 +12,8 @@ namespace ProductServer.Services
 
     List<CategoryDto> ToCategory(IEnumerable<ICategory> categories);
     List<SupplierDto> ToSupplier(IEnumerable<ISupplier> suppliers);
+
+    PaginationDto<T> ToPagination<T>(IEnumerable<T> items, int totalPages, int pageSize, int pageOffset) where T : class;
   }
 
   public class DtoService : IDtoService
@@ -19,6 +21,17 @@ namespace ProductServer.Services
     public List<ProductMasterDto> ToProductMaster(IEnumerable<IProduct> products)
     {
       return products.Select(p => new ProductMasterDto(p)).ToList();
+    }
+
+    public PaginationDto<T> ToPagination<T>(IEnumerable<T> items, int totalPages, int pageSize, int pageOffset) where T : class
+    {
+      return new PaginationDto<T>
+      {
+        Items = items,
+        TotalPages = totalPages,
+        PageSize = pageSize,
+        PageOffset = pageOffset
+      };
     }
 
     public ProductDetailDto ToProductDetail(IProduct product)
@@ -44,4 +57,5 @@ namespace ProductServer.Services
       }).ToList();
     }
   }
+
 }

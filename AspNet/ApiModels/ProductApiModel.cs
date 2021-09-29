@@ -49,7 +49,7 @@ namespace ProductServer.ApiModels
   public class FindProductRequest
   {
     public string Name { get; set; } = "";
-    public List<string> Category { get; set; } = new List<string>();
+    public List<Guid> Categories { get; set; } = new List<Guid>();
     public double MinPrice { get; set; } = double.MinValue;
     public double MaxPrice { get; set; } = double.MaxValue;
     public int Size { get; set; } = 20;

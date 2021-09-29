@@ -30,13 +30,16 @@ namespace ProductServer.Controllers
     }
 
     [HttpGet]
-    public List<ProductMasterDto> FindProducts([FromQuery] FindProductRequest query)
+    public PaginationDto<ProductMasterDto> FindProducts([FromQuery] FindProductRequest query)
     {
       var filter = requestService.ToProductFilter(query);
-      var sort = requestService.ToProductOrder(query);
-      var products = database.ProductRepository.Find(filter, sort, query.Size, query.Offset);
+      var order = requestService.ToProductOrder(query);
+      var products = database.ProductRepository.Find(filter, order, query.Size, query.Offset, out int total);
+
       var dtos = dtoService.ToProductMaster(products);
-      return dtos;
+      var response = dtoService.ToPagination(dtos, total / query.Size, query.Size, query.Offset);
+
+      return response;
     }
 
     [HttpGet("{id}")]
