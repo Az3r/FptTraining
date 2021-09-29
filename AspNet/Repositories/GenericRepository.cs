@@ -1,9 +1,11 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ProductServer.Models;
 
 namespace ProductServer.Repositories
 {
-  public class GenericRepository<TEntity> : IProductRepository<TEntity> where TEntity : class
+  public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
   {
     public GenericRepository(ProductContext context)
     {
@@ -11,17 +13,17 @@ namespace ProductServer.Repositories
       Entities = context.Set<TEntity>();
     }
 
-    public void Create(TEntity entity)
+    public virtual void Create(TEntity entity)
     {
       Entities.Add(entity);
     }
 
-    public void Update(TEntity entity)
+    public virtual void Update(TEntity entity)
     {
       Entities.Update(entity);
     }
 
-    public void Delete(object id)
+    public virtual void Delete(object id)
     {
       TEntity found = Entities.Find(id);
       if (found is not null) Entities.Remove(found);

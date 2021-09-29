@@ -9,7 +9,7 @@ namespace ProductServer.Repositories
     ProductRepository ProductRepository { get; }
     UserRepository UserRepository { get; }
     AuthRepository AuthRepository { get; }
-    GenericRepository<Category> CategoryRepository { get; }
+    CategoryRepository CategoryRepository { get; }
     GenericRepository<Supplier> SupplierRepository { get; }
 
     void Save();
@@ -23,7 +23,7 @@ namespace ProductServer.Repositories
       ProductRepository = new ProductRepository(context);
       UserRepository = new UserRepository(context);
       AuthRepository = new AuthRepository(context);
-      CategoryRepository = new GenericRepository<Category>(context);
+      CategoryRepository = new CategoryRepository(context);
       SupplierRepository = new GenericRepository<Supplier>(context);
     }
 
@@ -37,7 +37,7 @@ namespace ProductServer.Repositories
     public UserRepository UserRepository { get; }
 
     public AuthRepository AuthRepository { get; }
-    public GenericRepository<Category> CategoryRepository { get; }
+    public CategoryRepository CategoryRepository { get; }
     public GenericRepository<Supplier> SupplierRepository { get; }
 
     private ProductContext context;

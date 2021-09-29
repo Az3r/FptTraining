@@ -25,7 +25,7 @@ namespace ProductServer.Repositories
         Price = p.Price,
         Rating = p.Rating,
         Supplier = new Supplier { Name = p.Supplier.Name },
-        Categories = p.Categories.Select(c => new Category { Name = c.Name })
+        Categories = p.Categories.Select(c => new Category { Name = c.Name }).ToList()
       })
       .AsEnumerable();
 
@@ -50,7 +50,7 @@ namespace ProductServer.Repositories
         DiscontinuedDate = p.DiscontinuedDate,
         ProductDetail = p.ProductDetail,
         Supplier = new Supplier { ID = p.Supplier.ID, Name = p.Supplier.Name },
-        Categories = p.Categories.Select(c => new Category { ID = c.ID, Name = c.Name })
+        Categories = p.Categories.Select(c => new Category { ID = c.ID, Name = c.Name }).ToList()
       })
       .SingleOrDefault(p => p.ID.Equals(id));
 
@@ -92,7 +92,7 @@ namespace ProductServer.Repositories
         Price = p.Price,
         Rating = p.Rating,
         Supplier = new Supplier { Name = p.Supplier.Name },
-        Categories = p.Categories.Select(c => new Category { Name = c.Name })
+        Categories = p.Categories.Select(c => new Category { Name = c.Name }).ToList()
       });
 
       total = enumerable.Count();
@@ -101,6 +101,14 @@ namespace ProductServer.Repositories
       var sorted = Sort(products);
 
       return sorted;
+    }
+
+    public override void Create(Product product)
+    {
+      product.ID = Guid.NewGuid();
+      product.ProductDetail = new ProductDetail() { ProductID = product.ID, Detail = "sample text" };
+
+      Entities.Add(product);
     }
   }
 
@@ -123,7 +131,8 @@ namespace ProductServer.Repositories
   public enum OrderBy
   {
     ASC,
-    DESC
+    DESC,
+    NONE
   }
   public class ContainComparer : IEqualityComparer<Category>
   {

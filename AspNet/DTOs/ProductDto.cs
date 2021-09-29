@@ -19,7 +19,7 @@ namespace ProductServer.DTOs
       this.Price = product.Price;
       this.DiscontinuedDate = product.DiscontinuedDate;
       this.Categories = product.Categories.ToList();
-      this.Detail = product.ProductDetail.Detail;
+      this.Detail = product.ProductDetail?.Detail;
     }
 
     public string Name { get; set; }

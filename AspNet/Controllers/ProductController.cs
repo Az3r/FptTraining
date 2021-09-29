@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductServer.ApiModels;
@@ -43,19 +44,27 @@ namespace ProductServer.Controllers
     }
 
     [HttpGet("{id}")]
-    public ProductDetailDto GetProduct(Guid id)
+    public ActionResult<ProductDetailDto> GetProduct(Guid id)
     {
       var product = database.ProductRepository.GetProduct(id);
-      var dto = dtoService.ToProductDetail(product);
+      if (product is null) return NotFound(id);
 
-      return dto;
+      var dto = dtoService.ToProductDetail(product);
+      return Ok(dto);
     }
 
     [HttpPost]
     public IActionResult CreateProduct(CreateProductRequest body)
     {
       var product = requestService.ToProduct(body);
+
+      // find and track Category entities,
+      // so that Entity Framework won't try to insert new Category entities
+      var categories = database.CategoryRepository.FindAndTrack(product.Categories.Select(c => c.ID));
+      product.Categories = categories.ToList();
       database.ProductRepository.Create(product);
+      database.Save();
+
       var dto = dtoService.ToProductDetail(product);
       return Created($"product/{product.ID}", dto);
     }

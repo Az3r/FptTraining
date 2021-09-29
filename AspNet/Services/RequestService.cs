@@ -22,10 +22,10 @@ namespace ProductServer.Services
       {
         Name = request.Name,
         ReleaseDate = request.ReleaseDate,
-        Categories = request.CategoryIds.Select(id => new Category { ID = id }),
+        Categories = request.CategoryIds.Select(id => new Category { ID = id }).ToList(),
         SupplierID = request.SupplierId,
         Description = request.Description,
-        Price = request.Price
+        Price = request.Price,
       };
     }
 
@@ -35,7 +35,7 @@ namespace ProductServer.Services
       {
         ID = id,
         Name = request.Name,
-        Categories = request.CategoryIds.Select(id => new Category { ID = id }),
+        Categories = request.CategoryIds.Select(id => new Category { ID = id }).ToList(),
         SupplierID = request.SupplierId,
         Description = request.Description,
         Price = request.Price,

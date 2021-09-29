@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProductServer.Repositories
 {
-  public interface IProductRepository<TEntity> where TEntity : class
+  public interface IRepository<TEntity> where TEntity : class
   {
     void Create(TEntity entity);
     void Delete(object id);
