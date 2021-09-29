@@ -24,6 +24,7 @@ export class AuthService {
     const accessToken = localStorage.getItem("access_token")
     const refreshToken = localStorage.getItem("refresh_token")
 
+    // console.log(refreshToken === "undefined")
     if (refreshToken) return { accessToken, refreshToken }
     return undefined;
   }

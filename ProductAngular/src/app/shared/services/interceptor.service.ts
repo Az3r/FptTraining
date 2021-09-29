@@ -36,9 +36,12 @@ export class InterceptorService implements HttpInterceptor {
           case 401:
             return this.authService.refresh().pipe(
               switchMap(value => {
-                console.log(value)
                 // retry 1 more time but with new token
-                return next.handle(authRequest);
+                const newAuthOptions = {
+                  headers: request.headers.set("Authorization", `Bearer ${value.accessToken}`)
+                };
+                const newAuthRequest = request.clone(newAuthOptions)
+                return next.handle(newAuthRequest);
               })
             )
           default:
