@@ -89,7 +89,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="columns"></tr>
-      <tr class="row-hover" mat-row *matRowDef="let row; columns: columns;"></tr>
+      <tr class="row-hover" mat-row (click)="openProduct(row)" *matRowDef="let row; columns: columns;"></tr>
     </table>
     <mat-paginator [pageSizeOptions]="pageSizes" [length]="results?.totalPages" showFirstLastButtons
       (page)="onPaginationChanged($event)">

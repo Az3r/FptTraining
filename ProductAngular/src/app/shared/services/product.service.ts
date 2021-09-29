@@ -15,16 +15,16 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  async findProducts(query: FindProductQuery): Promise<PaginationResponse<IProductMaster>> {
+  async findProducts(query: IFindProductQuery): Promise<IPaginationResponse<IProductMaster>> {
     const querify = stringify({
       ...query,
       sort: query?.sort && Object.entries(query.sort)
         .map(([key, value]) => `${key}:${value}`)
     }, { skipNulls: true, arrayFormat: 'comma' })
 
-    return this.http.get<PaginationResponse<IProductMaster>>(`${this.url}?${querify}`)
+    return this.http.get<IPaginationResponse<IProductMaster>>(`${this.url}?${querify}`)
       .pipe(
-        catchError(err => this.onError<PaginationResponse<IProductMaster>>("findProducts", err))
+        catchError(err => this.onError<IPaginationResponse<IProductMaster>>("findProducts", err))
       )
       .toPromise();
   }
@@ -37,15 +37,24 @@ export class ProductService {
       .toPromise();
   }
 
-  async updateProduct(id: string, data: Omit<IProductDetail, "id">): Promise<void> {
-    return this.http.put<void>(`${this.url}/update/${id}`, data)
+  async updateProduct(id: string, data: IUpdateProductRequest): Promise<void> {
+    return this.http.put<void>(`${this.url}/${id}`, data)
       .pipe(catchError((err) => this.onError<void>("updateProduct", err)))
       .toPromise();
   }
 
-  deleteProduct(id: string): Promise<void> {
+  async deleteProduct(id: string): Promise<void> {
     return this.http.delete<void>(`${this.url}/delete/${id}`)
       .pipe(catchError((err) => this.onError<void>("deleteProduct", err)))
+      .toPromise();
+  }
+
+  async createProduct(request: ICreateProductRequest): Promise<IProductDetail> {
+    // make sure we are using utc time here
+    request.releasedDate = new Date(request.releasedDate.toUTCString())
+
+    return this.http.post<IProductDetail>(`${this.url}`, request)
+      .pipe(catchError((err) => this.onError<IProductDetail>("createProduct", err)))
       .toPromise();
   }
 
@@ -72,7 +81,7 @@ export class ProductService {
   }
 }
 
-export interface FindProductQuery {
+export interface IFindProductQuery {
   name?: string,
   categories?: string[],
   minPrice?: number,
@@ -84,9 +93,23 @@ export interface FindProductQuery {
   }
 }
 
-export interface PaginationResponse<T> {
+export interface IPaginationResponse<T> {
   items: T[],
   totalPages: number,
   pageSize: number,
   pageOffset: number
+}
+
+export interface ICreateProductRequest {
+  name: string,
+  description: string,
+  categoryIds: string[],
+  supplierId: string,
+  price: number,
+  releasedDate: Date
+}
+
+export interface IUpdateProductRequest extends ICreateProductRequest {
+  detail: string,
+  discontinuedDate: Date
 }

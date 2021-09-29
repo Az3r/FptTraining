@@ -16,15 +16,15 @@
   </mat-form-field>
   <div formArrayName="categories" class="form-category">
     <h3 style="margin-bottom: 0;">Select one or more categories</h3>
-    <mat-checkbox *ngFor="let category of categories; index as i" [formControlName]="i">
+    <mat-checkbox *ngFor="let category of categories; let i = index" [formControlName]="i">
       {{category.name | titlecase}}
     </mat-checkbox>
   </div>
-  <mat-form-field>
+  <mat-form-field style="margin-top: 1rem;">
     <mat-label>
       {{"supplier" | titlecase}}
     </mat-label>
-    <mat-select required>
+    <mat-select required formControlName="supplier">
       <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.name}}</mat-option>
     </mat-select>
   </mat-form-field>
@@ -38,13 +38,12 @@
     <mat-label>
       {{"released date" | titlecase}}
     </mat-label>
-    <input required matInput type='date' [matDatepicker]="release_date_picker" formControlName="releasedDate">
-    <mat-datepicker-toggle matSuffix [for]="release_date_picker"></mat-datepicker-toggle>
-    <mat-datepicker #release_date_picker></mat-datepicker>
+    <input required matInput type='date' formControlName="releasedDate">
   </mat-form-field>
-  <mat-checkbox>Go to product&apos;s page after created</mat-checkbox>
+  <mat-checkbox formControlName="goToDetail">Go to product&apos;s page after created</mat-checkbox>
   <mat-dialog-actions>
-    <button mat-raised-button type="submit" color='primary'>{{"submit" | uppercase}}</button>
-    <button mat-dialog-close mat-button (click)="close()">{{"close" | uppercase}}</button>
+    <button [disabled]="submitting" mat-raised-button type="submit" color='primary'>{{"submit" | uppercase}}</button>
+    <button [disabled]="submitting" mat-dialog-close mat-button (click)="close()">{{"close" | uppercase}}</button>
+    <mat-spinner *ngIf="submitting" diameter="32" color='accent'></mat-spinner>
   </mat-dialog-actions>
 </form>

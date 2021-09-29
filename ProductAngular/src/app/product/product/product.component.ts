@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 import { ICategory, IProductMaster } from 'src/app/shared/models/product';
-import { FindProductQuery, PaginationResponse, ProductService } from 'src/app/shared/services/product.service';
+import { IFindProductQuery, IPaginationResponse, ProductService } from 'src/app/shared/services/product.service';
 import { CreateProductDialog } from '../create-product-dialog/create-product-dialog.component';
 
 @Component({
@@ -46,12 +47,13 @@ export class ProductComponent implements OnInit {
 
   offset: number = 0;
 
-  results?: PaginationResponse<IProductMaster>
+  results?: IPaginationResponse<IProductMaster>
 
 
 
   constructor(
-    public dialog: MatDialog,
+    private dialog: MatDialog,
+    private router: Router,
     private productService: ProductService,
     private fb: FormBuilder
   ) { }
@@ -91,7 +93,7 @@ export class ProductComponent implements OnInit {
     if (this.searchForm?.invalid) return;
 
     const value = this.searchForm!.value;
-    const query: FindProductQuery = {
+    const query: IFindProductQuery = {
       name: value.name,
       categories: this.categories.filter((_, i) => value.categories[i]).map(item => item.id),
       size: this.size,
@@ -103,6 +105,10 @@ export class ProductComponent implements OnInit {
 
     this.results = await this.productService.findProducts(query);
     this.products = this.results!.items;
+  }
+
+  openProduct(row: IProductMaster) {
+    this.router.navigate(["product", row.id])
   }
 
 }
