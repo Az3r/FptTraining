@@ -22,7 +22,7 @@
         <mat-label>
           {{"supplier" | titlecase}}
         </mat-label>
-        <mat-select formControlName="supplier">
+        <mat-select required formControlName="supplier">
           <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.name}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -30,13 +30,13 @@
         <mat-label>
           {{"price" | titlecase}}
         </mat-label>
-        <input matInput type="number" formControlName="price">
+        <input required matInput type="number" formControlName="price">
       </mat-form-field>
       <mat-form-field>
         <mat-label>
           {{"release date" | titlecase}}
         </mat-label>
-        <input matInput [matDatepicker]="release_date_picker" formControlName="releasedDate">
+        <input required matInput [matDatepicker]="release_date_picker" formControlName="releasedDate">
         <mat-datepicker-toggle matSuffix [for]="release_date_picker"></mat-datepicker-toggle>
         <mat-datepicker #release_date_picker></mat-datepicker>
       </mat-form-field>
@@ -48,11 +48,17 @@
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>{{"details" | titlecase }}</mat-label>
-        <textarea matInput rows="10" formControlName="detail"></textarea>
+        <textarea required matInput rows="10" formControlName="detail"></textarea>
       </mat-form-field>
       <div class="edit-actions">
-        <button mat-raised-button color='warn'>{{"delete this product"| titlecase}}</button>
-        <button type='submit' mat-raised-button color='primary'>{{"submit"| titlecase}}</button>
+        <button type='button' [disabled]="!product || submitting" mat-raised-button color='warn' (click)="onDelete()">
+          {{"delete this product"|titlecase}}
+        </button>
+        <div style="display: flex; align-items: center;">
+          <mat-spinner style="margin-right: 1rem;" *ngIf="submitting" diameter="40"></mat-spinner>
+          <button [disabled]="!product || submitting" type='submit' mat-raised-button color='primary'>{{"submit"|
+            titlecase}}</button>
+        </div>
       </div>
     </form>
   </div>
@@ -99,9 +105,9 @@
       <h3>
         {{"status" | titlecase}}
         :
-        <ng-template *ngIf="product.discontinuedDate else available">
-          {{product.discontinuedDate | date:'longDate'}}
-        </ng-template>
+        <span *ngIf="product.discontinuedDate else available">
+          Discontinued at {{product.discontinuedDate | date:'longDate'}}
+        </span>
         <ng-template #available>
           Available
         </ng-template>

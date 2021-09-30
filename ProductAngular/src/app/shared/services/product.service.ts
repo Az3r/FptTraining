@@ -38,20 +38,28 @@ export class ProductService {
   }
 
   async updateProduct(id: string, data: IUpdateProductRequest): Promise<void> {
+    // make sure we are using utc time here
+    if (typeof data.releasedDate !== 'string')
+      data.releasedDate = data.releasedDate.toISOString()
+    if (data.discontinuedDate && typeof data.discontinuedDate !== 'string')
+      data.discontinuedDate = data.discontinuedDate.toISOString()
+    console.log(data)
+
     return this.http.put<void>(`${this.url}/${id}`, data)
       .pipe(catchError((err) => this.onError<void>("updateProduct", err)))
       .toPromise();
   }
 
   async deleteProduct(id: string): Promise<void> {
-    return this.http.delete<void>(`${this.url}/delete/${id}`)
+    return this.http.delete<void>(`${this.url}/${id}`)
       .pipe(catchError((err) => this.onError<void>("deleteProduct", err)))
       .toPromise();
   }
 
   async createProduct(request: ICreateProductRequest): Promise<IProductDetail> {
     // make sure we are using utc time here
-    request.releasedDate = new Date(request.releasedDate.toUTCString())
+    if (typeof request.releasedDate !== 'string')
+      request.releasedDate = request.releasedDate.toISOString()
 
     return this.http.post<IProductDetail>(`${this.url}`, request)
       .pipe(catchError((err) => this.onError<IProductDetail>("createProduct", err)))
@@ -106,10 +114,10 @@ export interface ICreateProductRequest {
   categoryIds: string[],
   supplierId: string,
   price: number,
-  releasedDate: Date
+  releasedDate: Date | string
 }
 
 export interface IUpdateProductRequest extends ICreateProductRequest {
   detail: string,
-  discontinuedDate: Date
+  discontinuedDate?: Date | string
 }
