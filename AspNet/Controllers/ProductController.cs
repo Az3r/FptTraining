@@ -73,8 +73,14 @@ namespace ProductServer.Controllers
     public IActionResult UpdateProduct(Guid id, UpdateProductRequest body)
     {
       var product = requestService.ToProduct(id, body);
+
+      // find and track Category entities,
+      // so that Entity Framework won't try to insert new Category entities
+      var categories = database.CategoryRepository.FindAndTrack(product.Categories.Select(c => c.ID));
+      product.Categories = categories.ToList();
       database.ProductRepository.Update(product);
       database.Save();
+
       return NoContent();
     }
 
@@ -82,6 +88,7 @@ namespace ProductServer.Controllers
     public IActionResult DeleteProduct(Guid id)
     {
       database.ProductRepository.Delete(id);
+      database.Save();
       return NoContent();
     }
 

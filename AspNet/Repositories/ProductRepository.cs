@@ -72,9 +72,12 @@ namespace ProductServer.Repositories
 
       IEnumerable<Product> Sort(IEnumerable<Product> items)
       {
-        items = order.Rating == OrderBy.ASC ? items.OrderBy(p => p.Rating) : items.OrderByDescending(p => p.Rating);
-        items = order.Price == OrderBy.ASC ? items.OrderBy(p => p.Price) : items.OrderByDescending(p => p.Price);
-        items = order.Name == OrderBy.ASC ? items.OrderBy(p => p.Name) : items.OrderByDescending(p => p.Name);
+        if (order.Price != OrderBy.NONE)
+          items = order.Price == OrderBy.ASC ? items.OrderBy(p => p.Price) : items.OrderByDescending(p => p.Price);
+        if (order.Rating != OrderBy.NONE)
+          items = order.Rating == OrderBy.ASC ? items.OrderBy(p => p.Rating) : items.OrderByDescending(p => p.Rating);
+        if (order.Name != OrderBy.NONE)
+          items = order.Name == OrderBy.ASC ? items.OrderBy(p => p.Name) : items.OrderByDescending(p => p.Name);
 
         return items;
       };
@@ -109,6 +112,24 @@ namespace ProductServer.Repositories
       product.ProductDetail = new ProductDetail() { ProductID = product.ID, Detail = "sample text" };
 
       Entities.Add(product);
+    }
+
+    public override void Update(Product entity)
+    {
+      var product = Entities
+        .Include(p => p.Categories)
+        .Include(p => p.ProductDetail)
+        .Single(p => p.ID == entity.ID);
+      product.Name = entity.Name;
+      product.Description = entity.Description;
+      product.SupplierID = entity.SupplierID;
+      product.Categories = entity.Categories;
+      product.Price = entity.Price;
+      product.ReleaseDate = entity.ReleaseDate;
+      product.DiscontinuedDate = entity.DiscontinuedDate;
+      entity.ProductDetail.Detail = entity.ProductDetail.Detail;
+
+      Entities.Update(product);
     }
   }
 

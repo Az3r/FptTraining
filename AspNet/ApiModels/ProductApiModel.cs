@@ -15,7 +15,7 @@ namespace ProductServer.ApiModels
     public string Description { get; set; }
 
     [Required]
-    public DateTime ReleaseDate { get; set; }
+    public DateTime ReleasedDate { get; set; }
 
     [Required]
     public double Price { get; set; }
@@ -30,18 +30,25 @@ namespace ProductServer.ApiModels
   public class UpdateProductRequest
   {
     [MaxLength(200)]
+    [Required]
     public string Name { get; set; }
 
+    [Required]
     public string Description { get; set; }
 
-    public DateTime? ReleaseDate { get; set; }
+    [Required]
+    public DateTime ReleasedDate { get; set; }
 
+    [Required]
     public double Price { get; set; }
 
+    [Required]
     public Guid SupplierId { get; set; }
 
+    [Required]
     public List<Guid> CategoryIds { get; set; }
 
+    [Required]
     public string Detail { get; set; }
 
     public DateTime? DiscontinuedDate { get; set; }

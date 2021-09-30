@@ -21,7 +21,7 @@ namespace ProductServer.Services
       return new Product
       {
         Name = request.Name,
-        ReleaseDate = request.ReleaseDate,
+        ReleaseDate = request.ReleasedDate,
         Categories = request.CategoryIds.Select(id => new Category { ID = id }).ToList(),
         SupplierID = request.SupplierId,
         Description = request.Description,
@@ -35,6 +35,7 @@ namespace ProductServer.Services
       {
         ID = id,
         Name = request.Name,
+        ReleaseDate = request.ReleasedDate,
         Categories = request.CategoryIds.Select(id => new Category { ID = id }).ToList(),
         SupplierID = request.SupplierId,
         Description = request.Description,
