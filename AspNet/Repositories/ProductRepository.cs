@@ -65,9 +65,11 @@ namespace ProductServer.Repositories
                 || product.Categories.Contains(new Category { Name = filter.Name }, new ContainComparer())
                 || product.Supplier.Name.Contains(filter.Name, StringComparison.OrdinalIgnoreCase)
               )
-               && filter.Categories.All(c => product.Categories.Contains(new Category { ID = c }))
                && product.Price >= filter.MinPrice
-               && product.Price <= filter.MaxPrice;
+               && product.Price <= filter.MaxPrice
+               // no filter if no category is specified,
+               // otherwise select products whose categories has any item matching criteria
+               && (filter.CategorieIds.Count > 0 ? product.Categories.Any(c => filter.CategorieIds.Contains(c.ID)) : true);
       };
 
       IEnumerable<Product> Sort(IEnumerable<Product> items)
@@ -83,7 +85,7 @@ namespace ProductServer.Repositories
       };
 
 
-      var enumerable = Entities
+      var matches = Entities
       .Include(p => p.Supplier)
       .Include(p => p.Categories)
       .AsNoTracking()
@@ -98,12 +100,12 @@ namespace ProductServer.Repositories
         Categories = p.Categories.Select(c => new Category { Name = c.Name }).ToList()
       });
 
-      total = enumerable.Count();
+      total = matches.Count();
 
-      var products = enumerable.Skip(size * offset).Take(size);
-      var sorted = Sort(products);
+      var sorted = Sort(matches);
+      var taken = sorted.Skip(size * offset).Take(size);
 
-      return sorted;
+      return taken;
     }
 
     public override void Create(Product product)
@@ -136,7 +138,7 @@ namespace ProductServer.Repositories
   public class ProductFilter
   {
     public string Name { get; set; }
-    public List<Guid> Categories { get; set; }
+    public List<Guid> CategorieIds { get; set; }
     public double MinPrice { get; set; }
     public double MaxPrice { get; set; }
   }

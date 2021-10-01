@@ -50,7 +50,7 @@ namespace ProductServer.Services
       return new ProductFilter
       {
         Name = request.Name,
-        Categories = request.Categories,
+        CategorieIds = request.Categories,
         MinPrice = request.MinPrice,
         MaxPrice = request.MaxPrice
       };
@@ -58,13 +58,9 @@ namespace ProductServer.Services
 
     public ProductOrder ToProductOrder(FindProductRequest request)
     {
-      // ?sort=name:asc,price:desc
-      // ["name:asc", "price:desc"]
-      Console.WriteLine(request.Sort);
-      string[] fields = request.Sort.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
       ProductOrder sort = new ProductOrder();
 
-      foreach (string field in fields)
+      foreach (string field in request.Sort)
       {
         string[] options = field.Split(":", 2, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         switch (options[0])

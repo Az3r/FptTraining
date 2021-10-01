@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using ProductServer.Models;
+using ProductServer.Repositories;
 
 namespace ProductServer.ApiModels
 {
@@ -61,7 +62,7 @@ namespace ProductServer.ApiModels
     public double MaxPrice { get; set; } = double.MaxValue;
     public int Size { get; set; } = 20;
     public int Offset { get; set; } = 0;
-    public string Sort { get; set; } = "name:asc,id:asc";
+    public List<string> Sort { get; set; } = new List<string>();
   }
 
 }
