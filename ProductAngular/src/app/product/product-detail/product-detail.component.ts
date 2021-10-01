@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { ICategory, IProductDetail, ISupplier } from 'src/app/shared/models/product';
 import { ProductService } from 'src/app/shared/services/product.service';
 
@@ -24,6 +26,7 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private dialog: MatDialog,
     private router: Router,
     private snackbar: MatSnackBar,
     private productService: ProductService,
@@ -67,6 +70,13 @@ export class ProductDetailComponent implements OnInit {
         detail: [this.product!.detail]
       })
     }
+  }
+
+  confirmDelete() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, { width: '640px', data: { title: "delete prodcut", message: "You are about to delete this product, please confirm to proceed?" } });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.onDelete();
+    })
   }
 
   async onDelete() {

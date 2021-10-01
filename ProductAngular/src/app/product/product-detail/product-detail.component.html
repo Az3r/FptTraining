@@ -51,7 +51,8 @@
         <textarea required matInput rows="10" formControlName="detail"></textarea>
       </mat-form-field>
       <div class="edit-actions">
-        <button type='button' [disabled]="!product || submitting" mat-raised-button color='warn' (click)="onDelete()">
+        <button type='button' [disabled]="!product || submitting" mat-raised-button color='warn'
+          (click)="confirmDelete()">
           {{"delete this product"|titlecase}}
         </button>
         <div style="display: flex; align-items: center;">
@@ -116,9 +117,9 @@
       <p class="mat-body">
         {{product.detail}}
       </p>
-      <button mat-fab (click)="editProduct(true)">
-        <mat-icon>edit</mat-icon>
-      </button>
     </div>
   </ng-template>
 </div>
+<button mat-fab (click)="editProduct(true)">
+  <mat-icon>edit</mat-icon>
+</button>
