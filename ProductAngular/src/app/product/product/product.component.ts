@@ -33,7 +33,7 @@ export class ProductComponent implements OnInit {
 
   columns: string[] = ["name", "supplier", "category", "price", "rating"]
 
-  pageSizes = [5, 10, 15, 20]
+  pageSizes = [10, 15, 20]
 
   products: IProductMaster[] = []
 
@@ -48,6 +48,8 @@ export class ProductComponent implements OnInit {
   offset: number = 0;
 
   results?: IPaginationResponse<IProductMaster>
+
+  lastSearch: string = ""
 
 
 
@@ -67,9 +69,9 @@ export class ProductComponent implements OnInit {
         minPrice: [undefined],
         maxPrice: [undefined],
         sorting: this.fb.group({
-          name: this.fb.control('asc'),
-          price: this.fb.control('asc'),
-          rating: this.fb.control('asc'),
+          name: this.fb.control('none'),
+          price: this.fb.control('none'),
+          rating: this.fb.control('none'),
         })
       })
     })
@@ -86,16 +88,23 @@ export class ProductComponent implements OnInit {
   onPaginationChanged(event: PageEvent) {
     this.size = event.pageSize;
     this.offset = event.pageIndex;
-    this.onSearch()
+    console.log(event)
+    this.onSearch();
   }
 
   async onSearch() {
-    if (this.searchForm?.invalid) return;
-
     const value = this.searchForm!.value;
+    if (!value.name || this.searchForm!.invalid) return
+
+    if (this.lastSearch !== value.name) {
+      // reset offset because we are searching with new keyword
+      this.offset = 0
+    }
+
+
     const query: IFindProductQuery = {
       name: value.name,
-      categories: this.categories.filter((_, i) => value.categories[i]).map(item => item.id),
+      categories: this.categories.filter((_, i) => value.categories[i]),
       size: this.size,
       offset: this.offset,
       sort: value.sorting,
@@ -104,11 +113,22 @@ export class ProductComponent implements OnInit {
     }
 
     this.results = await this.productService.findProducts(query);
+
+    this.lastSearch = value.name;
     this.products = this.results!.items;
   }
 
   openProduct(row: IProductMaster) {
     this.router.navigate(["product", row.id])
+  }
+
+  toCategories(item: IProductMaster) {
+    return item.categories.join(', ')
+  }
+
+  get totalItems() {
+    if (!this.results) return 0;
+    return this.results.totalPages * this.results.pageSize;
   }
 
 }

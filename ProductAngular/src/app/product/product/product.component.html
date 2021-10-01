@@ -8,7 +8,7 @@
         </button>
         <mat-form-field floatLabel="never">
           <mat-placeholder>Find your products by name...</mat-placeholder>
-          <input matInput formControlName="name" required>
+          <input matInput formControlName="name">
         </mat-form-field>
         <button mat-raised-button type="submit">
           {{"search" | uppercase}}
@@ -37,17 +37,11 @@
         <div class="sorting" formGroupName="sorting">
           <h2>Sorting</h2>
           <div class="sorting-field">
-            <span class="mat-h3">{{"name" | titlecase}}</span>
-            <mat-radio-group name="name" formControlName="name">
-              <mat-radio-button value="asc">Ascending</mat-radio-button>
-              <mat-radio-button value="desc">Descending</mat-radio-button>
-            </mat-radio-group>
-          </div>
-          <div class="sorting-field">
             <span class="mat-h3">{{"price" | titlecase}}</span>
             <mat-radio-group name="price" formControlName="price">
               <mat-radio-button value="asc">Ascending</mat-radio-button>
               <mat-radio-button value="desc">Descending</mat-radio-button>
+              <mat-radio-button value="none">None</mat-radio-button>
             </mat-radio-group>
           </div>
           <div class="sorting-field">
@@ -55,6 +49,15 @@
             <mat-radio-group name="rating" formControlName="rating">
               <mat-radio-button value="asc">Ascending</mat-radio-button>
               <mat-radio-button value="desc">Descending</mat-radio-button>
+              <mat-radio-button value="none">None</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="sorting-field">
+            <span class="mat-h3">{{"name" | titlecase}}</span>
+            <mat-radio-group name="name" formControlName="name">
+              <mat-radio-button value="asc">Ascending</mat-radio-button>
+              <mat-radio-button value="desc">Descending</mat-radio-button>
+              <mat-radio-button value="none">None</mat-radio-button>
             </mat-radio-group>
           </div>
         </div>
@@ -63,35 +66,35 @@
   </form>
   <div class="content">
     <table mat-table [dataSource]="products">
-      <ng-container matColumnDef="name">
+      <template matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      </ng-container>
+      </template>
 
-      <ng-container matColumnDef="supplier">
+      <template matColumnDef="supplier">
         <th mat-header-cell *matHeaderCellDef> Supplier </th>
         <td mat-cell *matCellDef="let element"> {{element.supplier}} </td>
-      </ng-container>
+      </template>
 
-      <ng-container matColumnDef="category">
+      <template matColumnDef="category">
         <th mat-header-cell *matHeaderCellDef> Category </th>
-        <td mat-cell *matCellDef="let element"> {{element.category}} </td>
-      </ng-container>
+        <td mat-cell *matCellDef="let element"> {{toCategories(element)}} </td>
+      </template>
 
-      <ng-container matColumnDef="price">
+      <template matColumnDef="price">
         <th mat-header-cell *matHeaderCellDef> Price </th>
         <td mat-cell *matCellDef="let element"> {{element.price | currency}} </td>
-      </ng-container>
+      </template>
 
-      <ng-container matColumnDef="rating">
+      <template matColumnDef="rating">
         <th mat-header-cell *matHeaderCellDef> Rating </th>
         <td mat-cell *matCellDef="let element"> {{element.rating}} </td>
-      </ng-container>
+      </template>
 
       <tr mat-header-row *matHeaderRowDef="columns"></tr>
       <tr class="row-hover" mat-row (click)="openProduct(row)" *matRowDef="let row; columns: columns;"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="pageSizes" [length]="results?.totalPages" showFirstLastButtons
+    <mat-paginator [pageSizeOptions]="pageSizes" [length]="totalItems" showFirstLastButtons
       (page)="onPaginationChanged($event)">
     </mat-paginator>
   </div>

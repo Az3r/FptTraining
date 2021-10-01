@@ -18,9 +18,10 @@ export class ProductService {
   async findProducts(query: IFindProductQuery): Promise<IPaginationResponse<IProductMaster>> {
     const querify = stringify({
       ...query,
+      categories: query.categories?.map(c => c.id),
       sort: query?.sort && Object.entries(query.sort)
         .map(([key, value]) => `${key}:${value}`)
-    }, { skipNulls: true, arrayFormat: 'comma' })
+    }, { skipNulls: true, })
 
     return this.http.get<IPaginationResponse<IProductMaster>>(`${this.url}?${querify}`)
       .pipe(
@@ -91,7 +92,7 @@ export class ProductService {
 
 export interface IFindProductQuery {
   name?: string,
-  categories?: string[],
+  categories?: ICategory[],
   minPrice?: number,
   maxPrice?: number
   size?: number,
