@@ -25,7 +25,7 @@ export class InterceptorService implements HttpInterceptor {
     }
 
     const token = this.authService.token()
-    if (token?.accessToken)
+    if (token.accessToken)
       options.headers = request.headers.set("Authorization", `Bearer ${token.accessToken}`);
 
     const authRequest = request.clone(options)
