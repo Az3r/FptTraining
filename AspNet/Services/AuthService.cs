@@ -57,6 +57,7 @@ namespace ProductServer.Services
         Claims = new Dictionary<string, object>()
         {
           { "actor", user.ID.ToString() },
+          { "rol", "user" },
         },
         IssuedAt = DateTime.UtcNow,
         Audience = audience,
