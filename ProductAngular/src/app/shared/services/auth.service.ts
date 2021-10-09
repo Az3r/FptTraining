@@ -5,7 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { IAuthToken } from 'src/app/shared/models/auth';
 import { IUser } from '../models/user';
-import * as jwt from 'jsonwebtoken';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,7 @@ export class AuthService {
   readonly SECRET = "some string that is really secret";
   readonly AUDIENCE = "http://localhost:5000";
   readonly ISSUER = "http://localhost:4200";
+  private jwt = new JwtHelperService();
 
 
   observer: Subject<IUser> = new Subject<IUser>()
@@ -26,13 +27,11 @@ export class AuthService {
     return this.observer.asObservable();
   }
 
-  user() {
-    const accessToken = localStorage.getItem("access_token")
-    const refreshToken = localStorage.getItem("refresh_token")
+  async user() {
+    const token = localStorage.getItem("access_token")
 
-    // console.log(refreshToken === "undefined")
-    if (refreshToken) return { accessToken, refreshToken }
-    return undefined;
+    if (!token) return undefined;
+    return this.verify(token);
   }
 
   token(): Partial<IAuthToken> {
@@ -83,22 +82,16 @@ export class AuthService {
     return of(fallback);
   }
 
-  private async verify(token: string): Promise<IUser | undefined> {
+  private verify(token: string): Promise<IUser> {
     return new Promise((resolve, reject) => {
-      jwt.verify(token, this.SECRET, { algorithms: ["HS512"] }, (err, payload) => {
-        if (err) {
-          console.error(err);
-          return reject(err);
-        }
-        if (!payload) {
-          console.log("Decoded JWT has empty payload");
-          return resolve(undefined);
-        }
-
-        console.log(payload)
-        return resolve({ name: payload.name, role: payload.rol })
-      })
+      try {
+        const payload: { rol: string, name: string } = this.jwt.decodeToken(token)
+        return resolve({ role: payload.rol, name: payload.name })
+      } catch (error) {
+        return reject(error)
+      }
     })
+
   }
 
 }

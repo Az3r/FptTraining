@@ -2,8 +2,12 @@
   <a href="/" style="text-decoration: none;color: inherit;">
     {{"cep" | titlecase}} {{"training" | titlecase}}
   </a>
-  <div class="expand"></div>
+  <div class="expand">
+    <ng-container *ngIf="user">
+      {{user.name | titlecase}} ({{user.role | lowercase}})
+    </ng-container>
+  </div>
   <a *ngIf="user == undefined" href="/login" mat-button>{{"login" | titlecase}}</a>
-  <button *ngIf="user != undefined" mat-button (click)="logout()">{{"logout" | titlecase}}</button>
+  <button mat-button (click)="logout()">{{"logout" | titlecase}}</button>
 </mat-toolbar>
 <router-outlet></router-outlet>

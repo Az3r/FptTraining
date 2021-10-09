@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from './shared/services/auth.service';
-import { IAuthToken } from './shared/models/auth';
+import { IUser } from './shared/models/user';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ import { IAuthToken } from './shared/models/auth';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'ProductAngular';
 
-  user?: IAuthToken
+  user?: IUser
   subscription?: Subscription;
 
   constructor(
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.user = this.authService.user()
+    this.authService.user().then(user => this.user = user);
     this.subscription = this.authService.onChanged().subscribe(item => this.user = item);
   }
 
