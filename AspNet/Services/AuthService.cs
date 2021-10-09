@@ -58,6 +58,7 @@ namespace ProductServer.Services
         {
           { "actor", user.ID.ToString() },
           { "rol", "user" },
+          { "name", user.DisplayName },
         },
         IssuedAt = DateTime.UtcNow,
         Audience = audience,
