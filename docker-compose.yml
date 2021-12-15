@@ -8,6 +8,14 @@ services:
     environment:
       ACCEPT_EULA: "y"
       SA_PASSWORD: "Password1234"
+  postgresql:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: personal
   adminer:
     image: adminer
     ports:
